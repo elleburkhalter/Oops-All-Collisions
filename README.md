@@ -74,11 +74,11 @@ cmake --build build
 ## **Dependencies**
 
 ### **Core (always required)**
-- C++17 or newer
+- C++23 or newer
 - CMake >= 3.15
 
 ### **Optional (for visualization)**
-- [SFML 3.0.0](https://github.com/SFML/SFML) (automatically fetched via CMake’s `FetchContent` if `WITH_SFML=ON`)
+- [SFML 3.0.1](https://github.com/SFML/SFML) (automatically fetched via CMake’s `FetchContent` if `WITH_SFML=ON`)
 
 ### **Testing**
 - [Catch2 v3](https://github.com/catchorg/Catch2) (automatically fetched)
