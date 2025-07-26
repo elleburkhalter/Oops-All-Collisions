@@ -30,6 +30,7 @@ add_library(collision_core
         include/collision/ColliderFlags.h
         include/collision/BallCollider.h
         src/collision/BallCollider.cpp
+        include/game_object/base/AgentABC.h
 )
 target_include_directories(collision_core PUBLIC include)
 
