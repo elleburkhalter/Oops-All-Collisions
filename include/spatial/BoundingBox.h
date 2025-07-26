@@ -11,6 +11,7 @@ struct BoundingBox final : RegionInterface
     BoundingBox(const double min_x, const double min_y, const double max_x, const double max_y): min(min_x, min_y), max(max_x, max_y) {};
 
     [[nodiscard]] inline bool contains(Point p) const override;
+    [[nodiscard]] inline Point get_centroid() const override;
 
     Point min;
     Point max;

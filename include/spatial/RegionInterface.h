@@ -6,7 +6,9 @@
 struct RegionInterface
 {
     virtual ~RegionInterface() = default;
+
     [[nodiscard]] virtual bool contains(Point p) const = 0;
+    [[nodiscard]] virtual Point get_centroid() const;
 };
 
 #endif //REGIONINTERFACE_H
