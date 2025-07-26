@@ -1,6 +1,7 @@
 #ifndef COLLIDERINTERFACE_H
 #define COLLIDERINTERFACE_H
 
+#include <spatial/Point.h>
 #include <collision/ColliderFlags.h>
 
 class BallCollider;
@@ -12,6 +13,7 @@ public:
     virtual ~ColliderInterface() = default;
     [[nodiscard]] virtual CollisionCode resolve_collision_with(ColliderInterface& other) = 0;
 
+    [[nodiscard]] virtual Point get_centroid() const = 0;
     [[nodiscard]] bool is_movable() const { return movable; };
 
 protected:
