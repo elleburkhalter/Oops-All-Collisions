@@ -26,6 +26,10 @@ add_library(collision_core
         src/spatial/Point.cpp
         src/renderer/NullRenderer.cpp
         include/spatial/RegionInterface.h
+        include/collision/ColliderInterface.h
+        include/collision/ColliderFlags.h
+        include/collision/BallCollider.h
+        src/collision/BallCollider.cpp
 )
 target_include_directories(collision_core PUBLIC include)
 
