@@ -21,29 +21,34 @@ endif()
 
 # ===== Core library =====
 add_library(collision_core
-        # ADD PROJECT SOURCE FILES EXCEPT RENDERING HERE
+        src/spatial/Ball.cpp
+        src/spatial/BoundingBox.cpp
+        src/spatial/Point.cpp
+        src/renderer/NullRenderer.cpp
 )
 target_include_directories(collision_core PUBLIC include)
 
 # ===== Visualization library =====
 if(WITH_SFML)
-    add_library(collision_rendering
-            src/rendering/SFMLRenderer.cpp
-            src/rendering/NullRenderer.cpp
+    add_library(collision_renderer
+            src/renderer/SFMLRenderer.cpp
+            src/renderer/NullRenderer.cpp
+            src/renderer/NullRenderer.cpp
     )
-    target_link_libraries(collision_rendering PRIVATE collision_core SFML::Graphics)
-    target_include_directories(collision_rendering PUBLIC include)
+    target_link_libraries(collision_renderer PRIVATE collision_core SFML::Graphics)
+    target_include_directories(collision_renderer PUBLIC include)
 else()
-    add_library(collision_rendering
-            src/rendering/NullRenderer.cpp
+    add_library(collision_renderer
+            src/renderer/NullRenderer.cpp
+            src/renderer/NullRenderer.cpp
     )
-    target_link_libraries(collision_rendering PRIVATE collision_core)
-    target_include_directories(collision_rendering PUBLIC include)
+    target_link_libraries(collision_renderer PRIVATE collision_core)
+    target_include_directories(collision_renderer PUBLIC include)
 endif()
 
 # ===== Main executable =====
-add_executable(tower_defense apps/simulation_main.cpp)
-target_link_libraries(tower_defense PRIVATE collision_core collision_rendering)
+add_executable(tower_defense app/simulation_main.cpp)
+target_link_libraries(tower_defense PRIVATE collision_core collision_renderer)
 
 # ===== Tests =====
 if(WITH_TESTS)
