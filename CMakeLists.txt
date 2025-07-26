@@ -1,25 +1,27 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
 project(TowerDefenseCollision)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Generate compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(WITH_SFML "Enable SFML visualization" ON)
-option(WITH_TESTS "Build unit tests" ON)
-
-include(FetchContent)
-
-# ===== Fetch SFML if visualization is enabled =====
-if(WITH_SFML)
-    FetchContent_Declare(
-            sfml
-            GIT_REPOSITORY https://github.com/SFML/SFML.git
-            GIT_TAG 3.0.1
-    )
-    FetchContent_MakeAvailable(sfml)
+# Dependencies
+set(RAYLIB_VERSION 5.5)
+find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
+if (NOT raylib_FOUND) # If there's none, fetch and build raylib
+  include(FetchContent)
+  FetchContent_Declare(
+    raylib
+    DOWNLOAD_EXTRACT_TIMESTAMP OFF
+    URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
+  )
+  FetchContent_GetProperties(raylib)
+  if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
+    set(FETCHCONTENT_QUIET NO)
+    FetchContent_MakeAvailable(raylib)
+  endif()
 endif()
 
-# ===== Core library =====
+# Our Project
 add_library(collision_core
         src/spatial/Ball.cpp
         src/spatial/BoundingBox.cpp
@@ -36,28 +38,19 @@ add_library(collision_core
 )
 target_include_directories(collision_core PUBLIC include)
 
-# ===== Visualization library =====
-if(WITH_SFML)
-    add_library(collision_renderer
-            src/renderer/SFMLRenderer.cpp
-            src/renderer/NullRenderer.cpp
-            include/ui_object/Text.h
-    )
-    target_link_libraries(collision_renderer PRIVATE collision_core SFML::Graphics)
-    target_include_directories(collision_renderer PUBLIC include)
-else()
-    add_library(collision_renderer
-            src/renderer/NullRenderer.cpp
-    )
-    target_link_libraries(collision_renderer PRIVATE collision_core)
-    target_include_directories(collision_renderer PUBLIC include)
+add_executable(tower_defense app/simulation_main.cpp)
+#set(raylib_VERBOSE 1)
+target_link_libraries(tower_defense raylib collision_core)
+
+# Web Configurations
+if (${PLATFORM} STREQUAL "Web")
+    set_target_properties(tower_defense PROPERTIES SUFFIX ".html") # Tell Emscripten to build an example.html file.
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY -s GL_ENABLE_GET_PROC_ADDRESS=1")
 endif()
 
-# ===== Main executable =====
-add_executable(tower_defense app/simulation_main.cpp)
-target_link_libraries(tower_defense PRIVATE collision_core collision_renderer)
-
-# ===== Tests =====
-if(WITH_TESTS)
-    add_subdirectory(tests)
+# Checks if OSX and links appropriate frameworks (Only required on MacOS)
+if (APPLE)
+    target_link_libraries(tower_defense "-framework IOKit")
+    target_link_libraries(tower_defense "-framework Cocoa")
+    target_link_libraries(tower_defense "-framework OpenGL")
 endif()

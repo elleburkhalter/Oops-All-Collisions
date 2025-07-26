@@ -1,0 +1,20 @@
+CMakeFiles/collision_core.dir/src/collision/BallCollider.cpp.obj: \
+ C:\Users\Derek\Documents\c++Projects\Project3GameEngine\Github\Oops-All-Collisions\src\collision\BallCollider.cpp \
+ C:/Users/Derek/Documents/c++Projects/Project3GameEngine/Github/Oops-All-Collisions/include/collision/BallCollider.h \
+ C:/Users/Derek/Documents/c++Projects/Project3GameEngine/Github/Oops-All-Collisions/include/collision/ColliderInterface.h \
+ C:/Users/Derek/Documents/c++Projects/Project3GameEngine/Github/Oops-All-Collisions/include/spatial/Point.h \
+ C:/Users/Derek/Documents/c++Projects/Project3GameEngine/Github/Oops-All-Collisions/include/collision/ColliderFlags.h \
+ C:/Users/Derek/Documents/c++Projects/Project3GameEngine/Github/Oops-All-Collisions/include/spatial/Ball.h \
+ C:/Users/Derek/Documents/c++Projects/Project3GameEngine/Github/Oops-All-Collisions/include/spatial/RegionInterface.h \
+ C:/msys64/mingw64/include/c++/14.2.0/utility \
+ C:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
+ C:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/os_defines.h \
+ C:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/cpu_defines.h \
+ C:/msys64/mingw64/include/c++/14.2.0/pstl/pstl_config.h \
+ C:/msys64/mingw64/include/c++/14.2.0/bits/stl_relops.h \
+ C:/msys64/mingw64/include/c++/14.2.0/bits/stl_pair.h \
+ C:/msys64/mingw64/include/c++/14.2.0/type_traits \
+ C:/msys64/mingw64/include/c++/14.2.0/bits/version.h \
+ C:/msys64/mingw64/include/c++/14.2.0/bits/move.h \
+ C:/msys64/mingw64/include/c++/14.2.0/bits/utility.h \
+ C:/msys64/mingw64/include/c++/14.2.0/initializer_list

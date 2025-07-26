@@ -1,0 +1,2 @@
+C:\msys64\mingw64\bin\ar.exe qc libcollision_core.a CMakeFiles/collision_core.dir/src/spatial/Ball.cpp.obj CMakeFiles/collision_core.dir/src/spatial/BoundingBox.cpp.obj CMakeFiles/collision_core.dir/src/spatial/Point.cpp.obj CMakeFiles/collision_core.dir/src/renderer/NullRenderer.cpp.obj CMakeFiles/collision_core.dir/src/collision/BallCollider.cpp.obj
+C:\msys64\mingw64\bin\ranlib.exe libcollision_core.a
