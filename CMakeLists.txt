@@ -30,7 +30,9 @@ add_library(collision_core
         include/collision/ColliderFlags.h
         include/collision/BallCollider.h
         src/collision/BallCollider.cpp
+        include/game_object/base/EntityABC.h
         include/game_object/base/AgentABC.h
+        include/game_object/base/ProjectileABC.h
 )
 target_include_directories(collision_core PUBLIC include)
 
@@ -39,13 +41,12 @@ if(WITH_SFML)
     add_library(collision_renderer
             src/renderer/SFMLRenderer.cpp
             src/renderer/NullRenderer.cpp
-            src/renderer/NullRenderer.cpp
+            include/ui_object/Text.h
     )
     target_link_libraries(collision_renderer PRIVATE collision_core SFML::Graphics)
     target_include_directories(collision_renderer PUBLIC include)
 else()
     add_library(collision_renderer
-            src/renderer/NullRenderer.cpp
             src/renderer/NullRenderer.cpp
     )
     target_link_libraries(collision_renderer PRIVATE collision_core)

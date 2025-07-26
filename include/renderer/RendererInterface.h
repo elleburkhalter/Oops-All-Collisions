@@ -2,6 +2,11 @@
 #ifndef RENDERERINTERFACE_H
 #define RENDERERINTERFACE_H
 
+#include <spatial/BoundingBox.h>
+#include <game_object/base/AgentABC.h>
+#include <game_object/base/ProjectileABC.h>
+#include <ui_object/Text.h>
+
 // This will be the abstract base class responsible for providing
 // an interface for a visualization renderer (i.e. see the program
 // with SFML or use a NullRenderer to turn it off).
@@ -16,8 +21,8 @@ class RendererInterface
     virtual void finish_frame() = 0;
 
     // ----- Entities -----
-    virtual void draw_agent(const Agent& agent) = 0;
-    virtual void draw_projectile(const Projectile& projectile) = 0;
+    virtual void draw_agent(const AgentABC& agent) = 0;
+    virtual void draw_projectile(const ProjectileABC& projectile) = 0;
     // virtual void draw_terrain(const Terrain& terrain) = 0;  // Comes later probably? Haven't thought through this.
 
     // ----- Debug visualization -----
