@@ -25,6 +25,7 @@ add_library(collision_core
         src/spatial/BoundingBox.cpp
         src/spatial/Point.cpp
         src/renderer/NullRenderer.cpp
+        include/spatial/RegionInterface.h
 )
 target_include_directories(collision_core PUBLIC include)
 
