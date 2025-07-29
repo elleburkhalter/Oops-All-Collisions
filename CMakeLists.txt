@@ -30,14 +30,7 @@ add_library(oops_collision_core
         src/spatial/BoundingBox.cpp
         src/spatial/Point.cpp
         src/renderer/NullRenderer.cpp
-        include/spatial/RegionInterface.h
-        include/collision/ColliderInterface.h
-        include/collision/ColliderFlags.h
-        include/collision/BallCollider.h
         src/collision/BallCollider.cpp
-        include/game_object/base/EntityABC.h
-        include/game_object/base/AgentABC.h
-        include/game_object/base/ProjectileABC.h
         src/renderer/RaylibRenderer.cpp
 )
 target_include_directories(collision_core PUBLIC include)
