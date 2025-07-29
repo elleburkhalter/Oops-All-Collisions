@@ -3,6 +3,6 @@
 #define SFMLRENDERER_H
 
 // This will implement IRenderer interface to allow for visualization with
-// SFML.
+// Raylib.
 
 #endif //SFMLRENDERER_H
