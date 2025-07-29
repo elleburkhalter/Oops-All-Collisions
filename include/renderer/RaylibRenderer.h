@@ -1,8 +1,8 @@
 
-#ifndef SFMLRENDERER_H
-#define SFMLRENDERER_H
+#ifndef RAYLIBRENDERER_H
+#define RAYLIBRENDERER_H
 
 // This will implement IRenderer interface to allow for visualization with
 // Raylib.
 
-#endif //SFMLRENDERER_H
+#endif //RAYLIBRENDERER_H
