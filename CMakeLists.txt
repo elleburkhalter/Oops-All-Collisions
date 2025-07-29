@@ -29,9 +29,7 @@ add_library(oops_collision_core
         src/spatial/Ball.cpp
         src/spatial/BoundingBox.cpp
         src/spatial/Point.cpp
-        src/renderer/NullRenderer.cpp
         src/collision/BallCollider.cpp
-        src/renderer/RaylibRenderer.cpp
 )
 target_include_directories(collision_core PUBLIC include)
 
