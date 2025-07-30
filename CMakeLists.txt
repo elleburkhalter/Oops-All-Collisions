@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
+cmake_policy(SET CMP0135 NEW)
 project(Oops)
 
 option(WITH_RAYLIB "Enable Raylib visualization" ON)
