@@ -9,7 +9,7 @@
 
 // This will be the abstract base class responsible for providing
 // an interface for a visualization renderer (i.e. see the program
-// with SFML or use a NullRenderer to turn it off).
+// with Raylib or use a NullRenderer to turn it off).
 
 class RendererInterface
 {
