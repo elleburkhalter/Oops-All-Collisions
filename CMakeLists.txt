@@ -24,6 +24,11 @@ add_library(oops_core
         src/spatial/BoundingBox.cpp
         src/spatial/Point.cpp
         src/collision/BallCollider.cpp
+        src/data_structures/BoundingVolumeHierarchy.cpp
+        src/data_structures/MultiLevelGrid.cpp
+        src/data_structures/NaiveLinear.cpp
+        src/data_structures/SpatialHash.cpp
+        src/data_structures/SweepAndPrune.cpp
 )
 target_include_directories(oops_core PUBLIC include)
 
