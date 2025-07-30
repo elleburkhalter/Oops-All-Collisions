@@ -2,6 +2,7 @@
 #define COLLIDERINTERFACE_H
 
 #include <spatial/Point.h>
+#include <spatial/BoundingBox.h>
 #include <collision/ColliderFlags.h>
 
 class BallCollider;
@@ -9,18 +10,18 @@ class BallCollider;
 class ColliderInterface
 {
 public:
-    explicit ColliderInterface(const bool movable): movable(movable) {};
+    ColliderInterface() = delete;
     virtual ~ColliderInterface() = default;
-    [[nodiscard]] virtual CollisionCode resolve_collision_with(ColliderInterface& other) = 0;
 
+    // ----- Getters -----
     [[nodiscard]] virtual Point get_centroid() const = 0;
-    [[nodiscard]] bool is_movable() const { return movable; };
+    [[nodiscard]] virtual BoundingBox get_bounding_box() const = 0;
+
+    [[nodiscard]] virtual CollisionCode resolve_collision_with(ColliderInterface& other) = 0;
 
 protected:
     friend class BallCollider;
     [[nodiscard]] virtual CollisionCode resolve_collision_with_ball(BallCollider& other) = 0;
-
-    bool movable = true;
 };
 
 #endif //COLLIDERINTERFACE_H
