@@ -4,7 +4,15 @@ project(TowerDefenseCollision)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+<<<<<<< Updated upstream
 option(WITH_SFML "Enable SFML visualization" ON)
+=======
+cmake_minimum_required(VERSION 3.15)
+cmake_policy(SET CMP0135 NEW)
+project(Oops)
+
+option(WITH_RAYLIB "Enable Raylib visualization" ON)
+>>>>>>> Stashed changes
 option(WITH_TESTS "Build unit tests" ON)
 
 include(FetchContent)
