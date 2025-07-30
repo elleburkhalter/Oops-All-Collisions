@@ -5,6 +5,7 @@
 #include <spatial/BoundingBox.h>
 #include <game_object/interfaces/AgentInterface.h>
 #include <game_object/interfaces/ProjectileInterface.h>
+#include <raylib.h>
 #include <ui_object/Text.h>
 
 // This will be the abstract base class responsible for providing
