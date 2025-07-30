@@ -19,13 +19,21 @@ if (WITH_RAYLIB)
 endif()
 
 # Core library
-add_library(oops_collision_core
+add_library(oops_core
         src/spatial/Ball.cpp
         src/spatial/BoundingBox.cpp
         src/spatial/Point.cpp
         src/collision/BallCollider.cpp
 )
-target_include_directories(oops_collision_core PUBLIC include)
+target_include_directories(oops_core PUBLIC include)
+
+# Statistics tracking/logging library
+add_library(oops_statistics
+        src/statistics/LoggerStatistics.cpp
+        src/statistics/NullStatistics.cpp
+)
+target_link_libraries(oops_statistics PUBLIC oops_core)
+target_include_directories(oops_statistics PUBLIC include)
 
 # Rendering & executable
 if (WITH_RAYLIB)
@@ -33,18 +41,18 @@ if (WITH_RAYLIB)
             src/renderer/NullRenderer.cpp
             src/renderer/RaylibRenderer.cpp
     )
-    target_link_libraries(oops_rendering PUBLIC oops_collision_core raylib)
+    target_link_libraries(oops_rendering PUBLIC oops_core raylib)
     target_include_directories(oops_rendering PUBLIC include)
 
     add_executable(oops_executable app/simulation_main.cpp)
-    target_link_libraries(oops_executable PRIVATE oops_rendering)
+    target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
 else()
     add_library(oops_rendering src/renderer/NullRenderer.cpp)
-    target_link_libraries(oops_rendering PUBLIC oops_collision_core)
+    target_link_libraries(oops_rendering PUBLIC oops_core)
     target_include_directories(oops_rendering PUBLIC include)
 
     add_executable(oops_executable app/headless_main.cpp)
-    target_link_libraries(oops_executable PRIVATE oops_rendering)
+    target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
 endif()
 
 # Mac frameworks
