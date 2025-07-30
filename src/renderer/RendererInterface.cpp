@@ -1,4 +1,5 @@
 #include <renderer/RendererInterface.h>
+    //note, these functions will need to be run during the RaylibRenderer main update loop. 
     RendererInterface::is_open(){
         
     }
