@@ -19,6 +19,7 @@ public:
     virtual ~RendererInterface() = default;
 
     // ----- Frame management -----
+    //this stuff is not really needed IMO, mainly handled by raylib. 
     virtual bool is_open() const = 0;
     virtual void start_frame() = 0;
     virtual void finish_frame() = 0;
