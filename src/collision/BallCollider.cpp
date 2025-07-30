@@ -20,4 +20,15 @@ bool BallCollider::is_colliding_with_ball(const BallCollider& other) const
     return Point::get_distance_sq(other.collider_base.center, this->collider_base.center) < combined_rad * combined_rad;
 }
 
+BoundingBox BallCollider::get_bounding_box() const
+{
+    return {
+        this->collider_base.center.x - this->collider_base.radius,
+        this->collider_base.center.y - this->collider_base.radius,
+        this->collider_base.center.x + this->collider_base.radius,
+        this->collider_base.center.y + this->collider_base.radius
+    };
+}
+
+
 
