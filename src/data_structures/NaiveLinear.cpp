@@ -24,3 +24,8 @@ std::vector<EntityInterface&> NaiveLinear::get_collisions(const EntityInterface&
     }
     return active_collisions;
 }
+ranges::any_view<EntityInterface&> NaiveLinear::get_all_entities() const
+{
+    return {this->entities.begin(), this->entities.end()};
+}
+
