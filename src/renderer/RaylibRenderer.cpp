@@ -1,6 +1,7 @@
 //
 // Created by logan on 7/29/2025.
 //
+#include <renderer/RendererInterface.h>
 #include <unordered_map>
 
 //Mapping from collision count to color
