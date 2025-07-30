@@ -1,7 +1,7 @@
 #ifndef AGENTINTERFACE_H
 #define AGENTINTERFACE_H
 
-class AgentInterface
+class AgentInterface : EntityInterface
 {
 public:
     AgentInterface() = default;
