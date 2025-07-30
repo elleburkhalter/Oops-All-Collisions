@@ -9,7 +9,7 @@ class SpatialHash final : public ContainerInterface
 public:
     SpatialHash() = default;
 
-    std::vector<ColliderInterface&> get_collisions(const ColliderInterface& other) const override;
+    [[nodiscard]] std::vector<ColliderInterface&> get_collisions(const ColliderInterface& other) const override;
 
     void reserve_slots(size_t n) override;
     void add_collider(ColliderInterface& other) override;
@@ -30,7 +30,7 @@ private:
     };
 
     std::unordered_map<hash_key, std::list<ColliderInterface&>, hash_key_hasher> cells;
-    hash_key compute_hash(const ColliderInterface& other) const;
+    [[nodiscard]] hash_key compute_hash(const ColliderInterface& other) const;
 };
 
 #endif //SPATIALHASH_H
