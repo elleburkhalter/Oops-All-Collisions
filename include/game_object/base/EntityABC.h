@@ -1,5 +1,7 @@
-//#ifndef ENTITYABC_H
+
+#ifndef ENTITYABC_H
 #define ENTITYABC_H
+
 #include "raylib.h"
 #include <collision/ColliderInterface.h>
 #include <collision/ColliderFlags.h>
@@ -70,4 +72,4 @@ public:
 
 };
 
-//#endif //ENTITYABC_H
+#endif //ENTITYABC_H
