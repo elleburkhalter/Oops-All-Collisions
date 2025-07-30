@@ -51,5 +51,10 @@ void SpatialHash::update_structure()
     }
 }
 
+SpatialHash::hash_key SpatialHash::compute_hash(const ColliderInterface& other)
+{
+    const Point center = other.get_centroid();
+    return hash_key(static_cast<int>(center.x * POSITION_TO_CELL), static_cast<int>(center.y * POSITION_TO_CELL));
+}
 
 

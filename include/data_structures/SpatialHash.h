@@ -15,9 +15,13 @@ public:
     void add_collider(ColliderInterface& other) override;
     void update_structure() override;
 
+    static constexpr double TARGET_LOAD_FACTOR = 0.7;
+    static constexpr double AVERAGE_AGENT_OVERLAP = 1.5;
+    static constexpr double CELL_SIZE = 16.0;
+
 private:
-    constexpr double TARGET_LOAD_FACTOR = 0.7;
-    constexpr double AVERAGE_AGENT_OVERLAP = 1.5;
+
+    static constexpr double POSITION_TO_CELL = 1.0 / CELL_SIZE;
 
     struct hash_key {
         int x, y;
@@ -30,7 +34,7 @@ private:
     };
 
     std::unordered_map<hash_key, std::list<ColliderInterface&>, hash_key_hasher> cells;
-    [[nodiscard]] hash_key compute_hash(const ColliderInterface& other) const;
+    [[nodiscard]] static hash_key compute_hash(const ColliderInterface& other) ;
 };
 
 #endif //SPATIALHASH_H
