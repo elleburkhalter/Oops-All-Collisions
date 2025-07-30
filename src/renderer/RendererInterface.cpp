@@ -1,4 +1,5 @@
-    virtual bool is_open(){
+#include <renderer/RendererInterface.h>
+virtual bool is_open(){
         
     }
     virtual void start_frame(){
