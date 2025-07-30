@@ -9,10 +9,10 @@ class SpatialHash final : public ContainerInterface
 public:
     SpatialHash() = default;
 
-    [[nodiscard]] std::vector<ColliderInterface&> get_collisions(const ColliderInterface& other) const override;
+    [[nodiscard]] std::vector<EntityInterface&> get_collisions(const EntityInterface& other) const override;
 
     void reserve_slots(size_t n) override;
-    void add_collider(ColliderInterface& other) override;
+    void add_collider(EntityInterface& other) override;
     void update_structure() override;
 
     static constexpr double TARGET_LOAD_FACTOR = 0.7;
@@ -33,8 +33,8 @@ private:
         std::size_t operator()(const hash_key& key) const { return std::hash<int>()(key.x) ^ (std::hash<int>()(key.y) << 1); }
     };
 
-    std::unordered_map<hash_key, std::list<ColliderInterface&>, hash_key_hasher> cells;
-    [[nodiscard]] static hash_key compute_hash(const ColliderInterface& other) ;
+    std::unordered_map<hash_key, std::list<EntityInterface&>, hash_key_hasher> cells;
+    [[nodiscard]] static hash_key compute_hash(const EntityInterface& other) ;
 };
 
 #endif //SPATIALHASH_H

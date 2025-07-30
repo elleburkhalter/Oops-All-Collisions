@@ -1,6 +1,6 @@
 #include <data_structures/SpatialHash.h>
 
-void SpatialHash::add_collider(ColliderInterface& other)
+void SpatialHash::add_collider(EntityInterface& other)
 {
     cells[compute_hash(other)].emplace_back(other);
 }
@@ -8,7 +8,7 @@ void SpatialHash::reserve_slots(const size_t n)
 {
     cells.reserve(static_cast<size_t>(n * AVERAGE_AGENT_OVERLAP / TARGET_LOAD_FACTOR));
 }
-std::vector<ColliderInterface&> SpatialHash::get_collisions(const ColliderInterface& other) const
+std::vector<EntityInterface&> SpatialHash::get_collisions(const EntityInterface& other) const
 {
     const hash_key original_key = compute_hash(other);
     const hash_key potential_keys[9] = {
@@ -23,14 +23,14 @@ std::vector<ColliderInterface&> SpatialHash::get_collisions(const ColliderInterf
         hash_key(original_key.x + 1, original_key.y - 1),
     };
 
-    std::vector<ColliderInterface&> active_collisions{};
+    std::vector<EntityInterface&> active_collisions{};
 
     for (const hash_key& key : potential_keys)
     {
         if (!cells.contains(key)) continue;
         for (const auto& collider : cells.at(key))
         {
-            if (other.is_colliding_with(collider)) active_collisions.emplace_back(collider);
+            if (other.get_collider().is_colliding_with(collider)) active_collisions.emplace_back(collider);
         }
     }
 
@@ -51,9 +51,9 @@ void SpatialHash::update_structure()
     }
 }
 
-SpatialHash::hash_key SpatialHash::compute_hash(const ColliderInterface& other)
+SpatialHash::hash_key SpatialHash::compute_hash(const EntityInterface& other)
 {
-    const Point center = other.get_centroid();
+    const Point center = other.get_location();
     return hash_key(static_cast<int>(center.x * POSITION_TO_CELL), static_cast<int>(center.y * POSITION_TO_CELL));
 }
 

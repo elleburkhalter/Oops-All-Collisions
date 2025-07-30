@@ -9,14 +9,14 @@ class NaiveLinear final : public ContainerInterface
 {
 public:
     NaiveLinear() = default;
-    [[nodiscard]] std::vector<ColliderInterface&> get_collisions(const ColliderInterface& other) const override;
+    [[nodiscard]] std::vector<EntityInterface&> get_collisions(const EntityInterface& other) const override;
 
     void reserve_slots(size_t n) override;
-    void add_collider(ColliderInterface& other) override;
+    void add_collider(EntityInterface& other) override;
     void update_structure() override;
 
 private:
-    std::vector<ColliderInterface&> colliders{};
+    std::vector<EntityInterface&> entities{};
 
 };
 
