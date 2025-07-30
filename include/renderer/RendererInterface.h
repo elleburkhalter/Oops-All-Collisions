@@ -3,8 +3,8 @@
 #define RENDERERINTERFACE_H
 
 #include <spatial/BoundingBox.h>
-#include <game_object/base/AgentABC.h>
-#include <game_object/base/ProjectileABC.h>
+#include <game_object/interfaces/AgentInterface.h>
+#include <game_object/interfaces/ProjectileInterface.h>
 #include <ui_object/Text.h>
 
 // This will be the abstract base class responsible for providing
@@ -22,8 +22,8 @@ public:
     virtual void finish_frame() = 0;
 
     // ----- Entities -----
-    virtual void draw_agent(const AgentABC& agent) = 0;
-    virtual void draw_projectile(const ProjectileABC& projectile) = 0;
+    virtual void draw_agent(const AgentInterface& agent) = 0;
+    virtual void draw_projectile(const ProjectileInterface& projectile) = 0;
     // virtual void draw_terrain(const Terrain& terrain) = 0;  // Comes later probably? Haven't thought through this.
 
     // ----- Debug visualization -----

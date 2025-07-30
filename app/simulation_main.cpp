@@ -17,7 +17,7 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "game_object/base/EntityABC.h"
+#include "game_object/interfaces/EntityABC.h"
 
 //------------------------------------------------------------------------------------
 // Program main entry point
