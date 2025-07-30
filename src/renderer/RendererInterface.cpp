@@ -26,6 +26,9 @@
 
     // ----- Debug visualization -----
     RendererInterface::draw_bounding_box(const BoundingBox& bounding_box){
+        int width = bounding_box.max.x - bounding_box.min.x;
+        int height = bounding_box.max.y - bounding_box.min.y;
+        DrawRectangle(bounding_box.min.x, bounding_box.min.y, width, height, GREEN);
 
     }
     RendererInterface::draw_text(const Text& text){
