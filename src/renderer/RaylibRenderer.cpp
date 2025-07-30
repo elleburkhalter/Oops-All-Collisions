@@ -50,6 +50,8 @@ int main(void)
         }
         //----------------------------------------------------------------------------------
         else {
+            //inputs and logic during game loop go here
+            //instantiate entities here
         }
         //----------------------------------------------------------------------------------
         // Draw
@@ -71,7 +73,8 @@ int main(void)
             DrawCircleGradient(screenWidth - 350, screenHeight - 1200, 200, MAGENTA, DARKPURPLE);
             DrawCircleGradient(screenWidth - 700, screenHeight - 200, 150, SKYBLUE, DARKBLUE);
         } else {
-            DrawText("move dude with keys", 10, 10, 20, DARKGRAY);
+            //drawing during game loop goes here
+            
             //DrawCircleV(ballPosition, 50, MAROON);
         }
 
