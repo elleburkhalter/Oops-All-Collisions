@@ -9,7 +9,7 @@ class NaiveLinear final : public ContainerInterface
 {
 public:
     NaiveLinear() = default;
-    std::vector<ColliderInterface&> get_collisions(const ColliderInterface& other) const override;
+    [[nodiscard]] std::vector<ColliderInterface&> get_collisions(const ColliderInterface& other) const override;
 
     void reserve_slots(size_t n) override;
     void add_collider(ColliderInterface& other) override;

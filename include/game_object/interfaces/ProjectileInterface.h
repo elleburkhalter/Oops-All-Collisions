@@ -4,7 +4,7 @@
 class ProjectileInterface
 {
 public:
-    ProjectileInterface() = delete;
+    ProjectileInterface() = default;
     virtual ~ProjectileInterface()() = default;
 
     // TODO: Figure out what all a Projectile needs to be able to do.

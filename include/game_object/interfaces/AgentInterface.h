@@ -4,7 +4,7 @@
 class AgentInterface
 {
 public:
-    AgentInterface() = delete;
+    AgentInterface() = default;
     virtual ~AgentInterface() = default;
 
     // TODO: Figure out what all an Agent needs to be able to do.

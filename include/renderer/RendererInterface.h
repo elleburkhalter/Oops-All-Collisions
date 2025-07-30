@@ -14,6 +14,7 @@
 class RendererInterface
 {
 public:
+    RendererInterface() = default;
     virtual ~RendererInterface() = default;
 
     // ----- Frame management -----
