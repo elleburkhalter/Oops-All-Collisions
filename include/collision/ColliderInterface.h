@@ -10,7 +10,7 @@ class BallCollider;
 class ColliderInterface
 {
 public:
-    ColliderInterface() = delete;
+    ColliderInterface() = default;
     virtual ~ColliderInterface() = default;
 
     // ----- Getters -----
