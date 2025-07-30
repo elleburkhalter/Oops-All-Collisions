@@ -1,7 +1,27 @@
 //
 // Created by logan on 7/29/2025.
 //
+#include <unordered_map>
 
+//Mapping from collision count to color
+std::unordered_map<int, Color> collisionColorMap = {
+    {0, DARKBLUE},
+    {1, BLUE},
+    {2, GREEN},
+    {3, YELLOW},
+    {4, ORANGE},
+    {5, RED},
+    {6, PINK},
+    {7, MAGENTA},
+};
+
+// Function to retrieve color based on collision count
+Color getBallColor(int collisionCount) {
+    if (collisionColorMap.find(collisionCount) != collisionColorMap.end()) {
+        return collisionColorMap[collisionCount];
+    }
+    return PURPLE; // Default color
+}
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
