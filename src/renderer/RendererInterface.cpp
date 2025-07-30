@@ -12,10 +12,11 @@
 
     // ----- Entities -----
     RendererInterface::draw_agent(const AgentInterface& agent){
-
+        Point newSpot = agent.get_location();
+        
     }
     RendererInterface::draw_projectile(const ProjectileInterface& projectile){
-
+        Point newSpot = projectile.get_location();
     }
     // virtual void draw_terrain(const Terrain& terrain) = 0;  // Comes later probably? Haven't thought through this.
 
