@@ -13,10 +13,14 @@
     // ----- Entities -----
     RendererInterface::draw_agent(const AgentInterface& agent){
         Point newSpot = agent.get_location();
+        //radius set to 100 by default, we don't have a getradius function yet so that will need to be implemented
+        DrawCircleGradient(newSpot.x, newSpot.y, 100, PINK, RED);
         
     }
     RendererInterface::draw_projectile(const ProjectileInterface& projectile){
         Point newSpot = projectile.get_location();
+        //radius set to 100 by default, we don't have a getradius function yet so that will need to be implemented
+        DrawCircleGradient(newSpot.x, newSpot.y, 100, YELLLOW, ORANGE);
     }
     // virtual void draw_terrain(const Terrain& terrain) = 0;  // Comes later probably? Haven't thought through this.
 
