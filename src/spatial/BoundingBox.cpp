@@ -9,3 +9,13 @@ inline bool BoundingBox::contains(const Point p) const
 {
     return !(p.x < min.x || p.y < min.y || p.x > max.x || p.y > max.y);
 }
+
+inline double BoundingBox::get_height() const
+{
+    return max.y - min.y;
+}
+
+inline double BoundingBox::get_width() const
+{
+    return max.x - min.x;
+}
