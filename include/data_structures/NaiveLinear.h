@@ -14,6 +14,7 @@ public:
     // ----- Getters -----
     [[nodiscard]] std::vector<EntityInterface&> get_collisions(const EntityInterface& other) const override;
     [[nodiscard]] ranges::any_view<EntityInterface&> get_all_entities() const override;
+    [[nodiscard]] size_t get_entity_count() const override;
 
     void reserve_slots(size_t n) override;
     void add_collider(EntityInterface& other) override;

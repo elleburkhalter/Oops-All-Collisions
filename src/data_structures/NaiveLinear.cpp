@@ -29,3 +29,7 @@ ranges::any_view<EntityInterface&> NaiveLinear::get_all_entities() const
     return {this->entities.begin(), this->entities.end()};
 }
 
+size_t NaiveLinear::get_entity_count() const
+{
+    return this->entities.size();
+}

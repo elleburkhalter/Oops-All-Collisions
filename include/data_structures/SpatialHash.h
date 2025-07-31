@@ -11,9 +11,12 @@ class SpatialHash final : public ContainerInterface
 public:
     SpatialHash() = default;
 
+    // ----- Getters -----
     [[nodiscard]] std::vector<EntityInterface&> get_collisions(const EntityInterface& other) const override;
     [[nodiscard]] ranges::any_view<EntityInterface&> get_all_entities() const override;
+    [[nodiscard]] size_t get_entity_count() const override;
 
+    // ----- Initialization -----
     void reserve_slots(size_t n) override;
     void add_collider(EntityInterface& other) override;
     void update_structure() override;
@@ -69,8 +72,8 @@ private:
                 skip_empty();
             }
         };
-        EntityInterface& operator*() const { return *inner; }
-        EntityInterface* operator->() const { return &(*inner); }
+        reference operator*() const { return *inner; }
+        pointer operator->() const { return &(*inner); }
         iterator& operator++()
         {
             ++inner;
