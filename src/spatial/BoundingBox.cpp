@@ -19,3 +19,21 @@ inline double BoundingBox::get_width() const
 {
     return max.x - min.x;
 }
+
+inline Point BoundingBox::get_ul() const
+{
+    return min;
+}
+inline Point BoundingBox::get_br() const
+{
+    return max;
+}
+inline Point BoundingBox::get_bl() const
+{
+    return {min.x, max.y};
+}
+inline Point BoundingBox::get_ur() const
+{
+    return {max.x, min.y};
+}
+
