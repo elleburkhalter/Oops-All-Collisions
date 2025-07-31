@@ -1,3 +1,5 @@
+#include <range/v3/iterator_range.hpp>
+#include <range/v3/view/any_view.hpp>
 #include <data_structures/SpatialHash.h>
 
 void SpatialHash::add_collider(EntityInterface& other)
@@ -55,6 +57,12 @@ SpatialHash::hash_key SpatialHash::compute_hash(const EntityInterface& other)
 {
     const Point center = other.get_location();
     return hash_key(static_cast<int>(center.x * POSITION_TO_CELL), static_cast<int>(center.y * POSITION_TO_CELL));
+}
+
+ranges::any_view<EntityInterface&> SpatialHash::get_all_entities() const
+{
+    auto range = ranges::make_iterator_range(this->begin(), this->end());
+    return ranges::any_view<EntityInterface&>{range};
 }
 
 
