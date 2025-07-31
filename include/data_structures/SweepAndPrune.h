@@ -11,8 +11,8 @@ public:
 
     // ----- Getters -----
     // Note that single collision checks are not supported!
-    [[nodiscard]] std::list<std::pair<EntityInterface&, EntityInterface&>> get_all_collisions() const override;
-    [[nodiscard]] ranges::any_view<EntityInterface&> get_all_entities() const override;
+    [[nodiscard]] std::list<std::pair<EntityInterface*, EntityInterface*>> get_all_collisions() const override;
+    [[nodiscard]] ranges::any_view<EntityInterface*> get_all_entities() const override;
     [[nodiscard]] size_t get_entity_count() const override;
 
     // ----- Initialization -----

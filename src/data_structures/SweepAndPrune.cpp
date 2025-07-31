@@ -37,21 +37,21 @@ void SweepAndPrune::update_structure()
     }
 }
 
-ranges::any_view<EntityInterface&> SweepAndPrune::get_all_entities() const
+ranges::any_view<EntityInterface*> SweepAndPrune::get_all_entities() const
 {
     auto base_range = ranges::make_subrange(this->entities.begin(), this->entities.end());
 
     auto transformed = base_range
-        | ranges::views::transform([](const SAPLocation& loc) -> EntityInterface& {
-              return *(loc.referer);
+        | ranges::views::transform([](const SAPLocation& loc) -> EntityInterface* {
+              return loc.referer.get();
           });
 
     return {transformed};
 }
 
-std::list<std::pair<EntityInterface&, EntityInterface&>> SweepAndPrune::get_all_collisions() const
+std::list<std::pair<EntityInterface*, EntityInterface*>> SweepAndPrune::get_all_collisions() const
 {
-    std::list<std::pair<EntityInterface&, EntityInterface&>> active_collisions{};
+    std::list<std::pair<EntityInterface*, EntityInterface*>> active_collisions{};
     std::unordered_set<EntityInterface*> active_entities{};
 
     for (const auto& entity_bound : this->entities)
@@ -75,7 +75,7 @@ std::list<std::pair<EntityInterface&, EntityInterface&>> SweepAndPrune::get_all_
                 // Narrow-phase collision
                 if (collider1.is_colliding_with(collider2))
                 {
-                    active_collisions.emplace_back(*current, *other);
+                    active_collisions.emplace_back(current, other);
                 }
             }
 
