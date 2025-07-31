@@ -3,7 +3,7 @@
 
 #include <game_object/interfaces/EntityInterface.h>
 
-class AgentInterface : EntityInterface
+class AgentInterface
 {
 public:
     AgentInterface() = default;

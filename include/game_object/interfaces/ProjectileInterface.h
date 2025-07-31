@@ -2,7 +2,7 @@
 #define PROJECTILEINTERFACE_H
 #include <game_object/interfaces/EntityInterface.h>
 
-class ProjectileInterface : EntityInterface
+class ProjectileInterface
 {
 public:
     ProjectileInterface() = default;

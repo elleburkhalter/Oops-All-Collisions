@@ -13,9 +13,9 @@ public:
     virtual ~ContainerInterface() = default;
 
     // ----- Getters -----
-    [[nodiscard]] virtual std::vector<EntityInterface&> get_collisions(const EntityInterface& other) const { throw std::exception{"Container implementation does not support single-collision lookups."}; };
-    [[nodiscard]] virtual std::list<std::pair<EntityInterface&, EntityInterface&>> get_all_collisions() const;
-    [[nodiscard]] virtual ranges::any_view<EntityInterface&> get_all_entities() const = 0;
+    [[nodiscard]] virtual std::vector<EntityInterface*> get_collisions(const EntityInterface& other) const { throw std::exception{"Container implementation does not support single-collision lookups."}; };
+    [[nodiscard]] virtual std::list<std::pair<EntityInterface*, EntityInterface*>> get_all_collisions() const;
+    [[nodiscard]] virtual ranges::any_view<EntityInterface*> get_all_entities() const = 0;
     [[nodiscard]] virtual size_t get_entity_count() const = 0;
 
     // ----- Initialization -----
