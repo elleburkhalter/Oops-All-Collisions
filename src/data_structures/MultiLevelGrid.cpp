@@ -117,7 +117,7 @@ std::weak_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::get_root()
     return root;
 }
 
-inline bool MultiLevelGrid::MLGNode::is_contained(const BoundingBox& bbox) const
+inline bool MultiLevelGrid::MLGNode::contains(const BoundingBox& bbox) const
 {
     return this->bounding_box.min.x <= bbox.min.x &&
         this->bounding_box.max.x >= bbox.max.x &&
@@ -125,7 +125,7 @@ inline bool MultiLevelGrid::MLGNode::is_contained(const BoundingBox& bbox) const
         this->bounding_box.max.y >= bbox.max.y;
 }
 
-inline bool MultiLevelGrid::MLGNode::is_contained(const Point point) const
+inline bool MultiLevelGrid::MLGNode::contains(const Point point) const
 {
     return this->bounding_box.contains(point);
 }
@@ -133,7 +133,7 @@ inline bool MultiLevelGrid::MLGNode::is_contained(const Point point) const
 
 bool MultiLevelGrid::MLGNode::insert_recursive(EntityInterface& entity)
 {
-    if (!is_contained(entity.get_collider().get_bounding_box())) return false;
+    if (!contains(entity.get_collider().get_bounding_box())) return false;
     if (is_leaf() && !is_full())
     {
         entities.push_back(&entity);
@@ -160,13 +160,13 @@ void MultiLevelGrid::MLGNode::insert(EntityInterface& entity)
     auto locked = root.lock();
     if (!locked) return;
 
-    while (!locked->is_contained(entity.get_collider().get_bounding_box().min))
+    while (!locked->contains(entity.get_collider().get_bounding_box().min))
     {
         root = raise_root(true, true);
         locked = root.lock();
         if (!locked) return;
     }
-    while (!locked->is_contained(entity.get_collider().get_bounding_box().max))
+    while (!locked->contains(entity.get_collider().get_bounding_box().max))
     {
         root = raise_root(false, false);
         locked = root.lock();
@@ -175,4 +175,12 @@ void MultiLevelGrid::MLGNode::insert(EntityInterface& entity)
     locked->insert_recursive(entity);
 }
 
+MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::begin()
+{
+    return iterator(*this);
+}
+MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::end() const
+{
+    return iterator();
+}
 
