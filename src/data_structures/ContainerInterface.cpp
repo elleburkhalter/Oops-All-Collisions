@@ -14,9 +14,10 @@ std::list<std::pair<EntityInterface&, EntityInterface&>> ContainerInterface::get
         {
             if (&entity1 == &entity2) continue;  // check for self-collision.
 
-            const collision_record collision(&entity1, &entity2);
-            if (visited_collisions.contains(collision)) continue;
-            visited_collisions.insert(collision);
+            EntityInterface* ep1 = &entity1;
+            EntityInterface* ep2 = &entity2;
+            if (const collision_record collision(ep2, ep1); visited_collisions.contains(collision)) continue;
+            visited_collisions.emplace(ep1, ep2);
             active_collisions.emplace_back(entity1, entity2);
         }
     }
