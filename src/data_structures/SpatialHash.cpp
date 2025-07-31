@@ -5,6 +5,7 @@
 
 void SpatialHash::add_collider(EntityInterface& other)
 {
+    ++entity_count;
     cells[compute_hash(other)].emplace_back(other);
 }
 void SpatialHash::reserve_slots(const size_t n)
@@ -66,12 +67,9 @@ ranges::any_view<EntityInterface&> SpatialHash::get_all_entities() const
     return ranges::any_view<EntityInterface&>{range};
 }
 
-size_t SpatialHash::get_entity_count() const
+inline size_t SpatialHash::get_entity_count() const
 {
-    size_t count = 0;
-    for (const auto& v : cells | std::views::values)
-        count += v.size();
-    return count;
+    return entity_count;
 }
 
 
