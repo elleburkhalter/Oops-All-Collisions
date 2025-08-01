@@ -11,6 +11,11 @@ struct Point
     [[nodiscard]] inline double get_distance_sq(Point other) const;  // Intentionally not by reference; small struct :)
     [[nodiscard]] inline double get_distance(Point other) const;
 
+    inline Point operator+(Point other) const;
+    inline Point operator-(Point other) const;
+    inline Point operator+=(Point other);
+    inline Point operator-=(Point other);
+
     double x;
     double y;
 };
