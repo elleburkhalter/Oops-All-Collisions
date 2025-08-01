@@ -66,4 +66,11 @@ Point operator*(const double scalar, const Point other)
 {
     return other * scalar;
 }
-
+inline bool Point::operator==(const Point other) const
+{
+    return this->x == other.x && this->y == other.y;
+}
+inline bool Point::operator!=(const Point other) const
+{
+    return !(*this == other);
+}

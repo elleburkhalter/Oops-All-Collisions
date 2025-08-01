@@ -19,6 +19,8 @@ struct Point
     inline Point operator/(double scalar) const;
     inline Point operator*=(double scalar);
     inline Point operator/=(double scalar);
+    inline bool operator==(Point other) const;
+    inline bool operator!=(Point other) const;
 
     double x;
     double y;
