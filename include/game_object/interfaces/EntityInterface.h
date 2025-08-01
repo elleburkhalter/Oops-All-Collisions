@@ -17,7 +17,7 @@ public:
     [[nodiscard]] virtual inline Point get_velocity() const = 0;
     [[nodiscard]] ColliderInterface& get_collider() const { return collider; }
     template <typename T>
-    [[nodiscard]] std::shared_ptr<T> get_tag() { return std::static_pointer_cast<T>(this->tag); };
+    [[nodiscard]] std::shared_ptr<T> get_tag() { return std::static_pointer_cast<T>(this->tag.lock()); };
 
     // ----- Setters -----
     void set_movement_enabled() { flags |= EntityFlags::MovementEnabled; }
