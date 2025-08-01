@@ -43,6 +43,7 @@ add_library(oops_core
         src/data_structures/SpatialHash.cpp
         src/data_structures/SweepAndPrune.cpp
         src/data_structures/ContainerInterface.cpp
+        src/collision/ColliderInterface.cpp
 )
 target_include_directories(oops_core PUBLIC include)
 target_link_libraries(oops_core PUBLIC range-v3)
