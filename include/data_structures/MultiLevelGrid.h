@@ -8,30 +8,18 @@
 
 class MultiLevelGrid final : public ContainerInterface
 {
-public:
-    MultiLevelGrid() = default;
-
-    std::vector<EntityInterface*> get_collisions(const EntityInterface& other) const override;
-    ranges::any_view<EntityInterface*> get_all_entities() const override;
-    size_t get_entity_count() const override;
-
-    void reserve_slots(size_t n) override;
-    void add_collider(EntityInterface& other) override;
-    void update_structure() override;
-
-private:
-    class MLGNode : std::enable_shared_from_this<MLGNode>
+class MLGNode : std::enable_shared_from_this<MLGNode>
     {
-        class iterator;
-
     public:
+        class iterator;
+        MLGNode() = delete;
         explicit MLGNode(BoundingBox bounding_box): bounding_box(std::move(bounding_box)) {};
 
         // ----- Checkers -----
         [[nodiscard]] bool is_root() const { return parent.expired(); }
         [[nodiscard]] bool is_leaf() const { return ul_child == nullptr; }  // all four children should be assigned at once.
         [[nodiscard]] bool is_full() const { return entities.size() == SPLIT_SIZE; }
-        [[nodiscard]] bool is_empty() const { return is_leaf() && entities.empty(); }
+        [[nodiscard]] bool is_empty() const { return (is_leaf() && entities.empty()); }
         [[nodiscard]] bool can_delete_children() const { return !is_leaf() && ul_child->is_empty() && ur_child->is_empty() && bl_child->is_empty() && br_child->is_empty(); }
         [[nodiscard]] inline bool contains(const BoundingBox& bbox) const;
         [[nodiscard]] inline bool contains(Point point) const;
@@ -39,14 +27,21 @@ private:
         // ----- Getters -----
         [[nodiscard]] std::weak_ptr<MLGNode> get_parent() const { return parent; }
         [[nodiscard]] std::weak_ptr<MLGNode> get_root();
-        [[nodiscard]] iterator begin();
-        [[nodiscard]] iterator end() const;
+        [[nodiscard]] std::shared_ptr<MLGNode> get_ul_child() const { return ul_child; }
+        [[nodiscard]] std::shared_ptr<MLGNode> get_ur_child() const { return ur_child; }
+        [[nodiscard]] std::shared_ptr<MLGNode> get_bl_child() const { return bl_child; }
+        [[nodiscard]] std::shared_ptr<MLGNode> get_br_child() const { return br_child; }
+        [[nodiscard]] std::list<EntityInterface*>& get_entities() { return entities; }
+        [[nodiscard]] iterator begin() const;
+        [[nodiscard]] static iterator end();
 
         void insert(EntityInterface& entity);
+        std::list<EntityInterface*> coarse_collision_recursive(const BoundingBox& bbox) const;
+        bool insert_recursive(EntityInterface& entity);
+        void delete_children();
 
         static constexpr size_t SPLIT_SIZE = 10;
     private:
-        bool insert_recursive(EntityInterface& entity);
 
         std::shared_ptr<MLGNode> raise_root(bool expand_left, bool expand_up);;
         void split_node();
@@ -60,8 +55,9 @@ private:
 
         std::list<EntityInterface*> entities{};
 
-        BoundingBox bounding_box;
+        BoundingBox bounding_box{};
 
+    public:
         class iterator
         {
         public:
@@ -73,7 +69,7 @@ private:
             using pointer = EntityInterface**;        // operator-> returns a pointer-to-pointer
             using difference_type = std::ptrdiff_t;
 
-            explicit iterator(MLGNode& node)
+            explicit iterator(const MLGNode& node)
             {
                 to_visit = traverse(node);
                 skip_empty();
@@ -85,6 +81,8 @@ private:
             iterator(iterator&&) noexcept = default;
             iterator& operator=(iterator&&) noexcept = default;
             ~iterator() noexcept = default;
+
+            [[nodiscard]] _iter get_inner() const { return inner; };
 
             // Now just return the pointer itself
             reference operator*() const { return *inner; }
@@ -115,13 +113,13 @@ private:
 
         private:
 
-            std::list<MLGNode*> to_visit{};
-            MLGNode* outer = nullptr;
+            std::list<const MLGNode*> to_visit{};
+            const MLGNode* outer = nullptr;
             _iter inner{};
 
-            static std::list<MLGNode*> traverse(MLGNode& node)
+            static std::list<const MLGNode*> traverse(const MLGNode& node)
             {
-                std::list<MLGNode*> list{};
+                std::list<const MLGNode*> list{};
                 const bool node_has_children = !node.is_leaf();
                 if (node_has_children)
                 {
@@ -150,6 +148,30 @@ private:
         };
 
     };
+
+public:
+    MultiLevelGrid() = default;
+
+    std::vector<EntityInterface*> get_collisions(const EntityInterface& other) const override;
+    ranges::any_view<EntityInterface*> get_all_entities() const override;
+    size_t get_entity_count() const override;
+
+    void reserve_slots(size_t n) override;
+    void add_collider(EntityInterface& other) override;
+    void update_structure() override;
+
+    MLGNode::iterator begin() const;
+    MLGNode::iterator end() const;
+
+    static constexpr double X_START_MIN = -128.0;
+    static constexpr double X_START_MAX = 128.0;
+    static constexpr double Y_START_MIN = -128.0;
+    static constexpr double Y_START_MAX = 128.0;
+
+    size_t entity_count = 0;
+
+private:
+    MLGNode root{{X_START_MIN, Y_START_MIN, X_START_MAX, Y_START_MAX}};
 };
 
 #endif //MULTILEVELGRID_H

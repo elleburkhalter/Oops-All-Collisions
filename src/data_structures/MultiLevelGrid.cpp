@@ -1,3 +1,4 @@
+#include <range/v3/iterator_range.hpp>
 #include <data_structures/MultiLevelGrid.h>
 
 // TODO: MLG Implementation
@@ -56,6 +57,8 @@ std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(con
     case 3: // go leftwards and upwards (we have br)
         p_center = bounding_box.min;
         break;
+    default:
+        break;
     }
 
     const BoundingBox p_bbox = {{p_center.x - bounding_box.get_width(), p_center.y - bounding_box.get_height()}, {p_center.x + bounding_box.get_width(), p_center.y + bounding_box.get_height()}};
@@ -92,6 +95,8 @@ std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(con
         new_root->ur_child = std::make_shared<MLGNode>(ur_bbox);
         new_root->bl_child = std::make_shared<MLGNode>(bl_bbox);
         new_root->br_child = shared_from_this();
+        break;
+    default:
         break;
     }
 
@@ -137,6 +142,7 @@ bool MultiLevelGrid::MLGNode::insert_recursive(EntityInterface& entity)
     if (is_leaf() && !is_full())
     {
         entities.push_back(&entity);
+        entity.set_tag<MLGNode>(shared_from_this());
         return true;
     }
     if (is_leaf())
@@ -150,6 +156,7 @@ bool MultiLevelGrid::MLGNode::insert_recursive(EntityInterface& entity)
         return true;
 
     entities.push_back(&entity);
+    entity.set_tag<MLGNode>(shared_from_this());
     return true;
 
 }
@@ -175,12 +182,124 @@ void MultiLevelGrid::MLGNode::insert(EntityInterface& entity)
     locked->insert_recursive(entity);
 }
 
-MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::begin()
+
+MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::begin() const
 {
     return iterator(*this);
 }
-MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::end() const
+MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::end()
 {
     return iterator();
+}
+
+MultiLevelGrid::MLGNode::iterator MultiLevelGrid::begin() const
+{
+    return root.begin();
+}
+MultiLevelGrid::MLGNode::iterator MultiLevelGrid::end() const
+{
+    return root.end();
+}
+void MultiLevelGrid::add_collider(EntityInterface& other)
+{
+    ++entity_count;
+    root.insert(other);
+    const auto new_root = root.get_root().lock();
+    root = *new_root;
+}
+void MultiLevelGrid::reserve_slots(size_t n)
+{
+
+}
+ranges::any_view<EntityInterface*> MultiLevelGrid::get_all_entities() const
+{
+    auto range = ranges::make_iterator_range(this->begin(), this->end());
+    return ranges::any_view<EntityInterface*>{range};
+}
+std::list<EntityInterface*> MultiLevelGrid::MLGNode::coarse_collision_recursive(const BoundingBox& bbox) const
+{
+    std::list<EntityInterface*> collisions{};
+    if (contains(bbox)) collisions = this->entities;
+    if (contains(bbox) && !is_leaf())
+    {
+        collisions.splice(collisions.end(), ul_child->coarse_collision_recursive(bbox));
+        collisions.splice(collisions.end(), ur_child->coarse_collision_recursive(bbox));
+        collisions.splice(collisions.end(), bl_child->coarse_collision_recursive(bbox));
+        collisions.splice(collisions.end(), br_child->coarse_collision_recursive(bbox));
+    }
+    return collisions;
+}
+
+std::vector<EntityInterface*> MultiLevelGrid::get_collisions(const EntityInterface& other) const
+{
+    std::vector<EntityInterface*> collisions{6};
+    const ColliderInterface& collider = other.get_collider();
+    const BoundingBox bbox = collider.get_bounding_box();
+
+    for (const std::list<EntityInterface*> candidates = this->root.coarse_collision_recursive(bbox); auto* candidate : candidates)
+    {
+        if (other.get_collider().is_colliding_with(candidate->get_collider())) collisions.push_back(candidate);
+    }
+    return collisions;
+}
+
+size_t MultiLevelGrid::get_entity_count() const
+{
+    return entity_count;
+}
+
+void MultiLevelGrid::MLGNode::delete_children()
+{
+    this->ul_child = nullptr;
+    this->ur_child = nullptr;
+    this->bl_child = nullptr;
+    this->br_child = nullptr;
+}
+
+
+void MultiLevelGrid::update_structure()
+{
+    for (MLGNode::iterator it = begin(); it != end(); ++it)
+    {
+        EntityInterface* entity = *it;
+        MLGNode container = *(entity->get_tag<MLGNode>());
+        // If container no longer contains entity; reinsert from root
+        if (!container.contains(entity->get_collider().get_bounding_box()))
+        {
+            container.get_entities().erase(it.get_inner());
+            add_collider(*entity);
+            // If rebinding the entity makes the parent of the container able to delete its children; do so.
+            if (const auto parent = container.get_parent().lock(); parent && parent->can_delete_children())
+            {
+                parent->delete_children();
+            }
+            continue;
+        }
+        // If container has children, see if any children fully encapsulate
+        if (!container.is_leaf())
+        {
+            if (const std::shared_ptr<MLGNode> child = container.get_ul_child(); child && child->insert_recursive(*entity))
+            {
+                container.get_entities().erase(it.get_inner());
+                continue;
+            }
+            if (const std::shared_ptr<MLGNode> child = container.get_ur_child(); child && child->insert_recursive(*entity))
+            {
+                container.get_entities().erase(it.get_inner());
+                continue;
+            }
+            if (const std::shared_ptr<MLGNode> child = container.get_bl_child(); child && child->insert_recursive(*entity))
+            {
+                container.get_entities().erase(it.get_inner());
+                continue;
+            }
+            if (const std::shared_ptr<MLGNode> child = container.get_br_child(); child && child->insert_recursive(*entity))
+            {
+                container.get_entities().erase(it.get_inner());
+                continue;
+            }
+        }
+        // otherwise nothing changes!
+    }
 }
 
