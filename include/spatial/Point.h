@@ -15,9 +15,15 @@ struct Point
     inline Point operator-(Point other) const;
     inline Point operator+=(Point other);
     inline Point operator-=(Point other);
+    inline Point operator*(double scalar) const;
+    inline Point operator/(double scalar) const;
+    inline Point operator*=(double scalar);
+    inline Point operator/=(double scalar);
 
     double x;
     double y;
 };
+
+Point operator*(double scalar, Point other);
 
 #endif //POINT_H

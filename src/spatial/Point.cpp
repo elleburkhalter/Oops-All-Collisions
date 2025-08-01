@@ -42,3 +42,28 @@ Point Point::operator-=(const Point other)
     this->y -= other.y;
     return *this;
 }
+inline Point Point::operator*(const double scalar) const
+{
+    return {this->x * scalar, this->y * scalar};
+}
+inline Point Point::operator/(const double scalar) const
+{
+    return {this->x / scalar, this->y / scalar};
+}
+inline Point Point::operator*=(const double scalar)
+{
+    this->x *= scalar;
+    this->y *= scalar;
+    return *this;
+}
+inline Point Point::operator/=(const double scalar)
+{
+    this->x /= scalar;
+    this->y /= scalar;
+    return *this;
+}
+Point operator*(const double scalar, const Point other)
+{
+    return other * scalar;
+}
+
