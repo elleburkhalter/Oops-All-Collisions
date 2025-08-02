@@ -2,9 +2,10 @@
 #ifndef RENDERERINTERFACE_H
 #define RENDERERINTERFACE_H
 
-#include <spatial/BoundingBox.h>
+#include <spatial/OopsBoundingBox.h>
 #include <game_object/interfaces/AgentInterface.h>
 #include <game_object/interfaces/ProjectileInterface.h>
+#include <raylib.h>
 #include <ui_object/Text.h>
 
 // This will be the abstract base class responsible for providing
@@ -18,6 +19,7 @@ public:
     virtual ~RendererInterface() = default;
 
     // ----- Frame management -----
+    //this stuff is not really needed IMO, mainly handled by raylib. 
     virtual bool is_open() const = 0;
     virtual void start_frame() = 0;
     virtual void finish_frame() = 0;

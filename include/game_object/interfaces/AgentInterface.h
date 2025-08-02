@@ -1,6 +1,8 @@
 #ifndef AGENTINTERFACE_H
 #define AGENTINTERFACE_H
 
+#include <game_object/interfaces/EntityInterface.h>
+
 class AgentInterface
 {
 public:

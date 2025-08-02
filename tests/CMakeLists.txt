@@ -17,10 +17,8 @@ set(TEST_SOURCES
 add_executable(run_tests ${TEST_SOURCES})
 
 target_link_libraries(run_tests
-        PRIVATE collision_core Catch2::Catch2WithMain
+        PRIVATE oops_core Catch2::Catch2WithMain
 )
-
-target_include_directories(run_tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 # ===== Register with CTest =====
 include(CTest)

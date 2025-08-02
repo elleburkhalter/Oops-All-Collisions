@@ -1,6 +1,7 @@
 #ifndef NAIVELINEAR_H
 #define NAIVELINEAR_H
 
+#include <range/v3/view/any_view.hpp>
 #include <vector>
 #include <data_structures/ContainerInterface.h>
 
@@ -9,14 +10,18 @@ class NaiveLinear final : public ContainerInterface
 {
 public:
     NaiveLinear() = default;
-    [[nodiscard]] std::vector<EntityInterface&> get_collisions(const EntityInterface& other) const override;
+
+    // ----- Getters -----
+    [[nodiscard]] std::vector<EntityInterface*> get_collisions(const EntityInterface& other) const override;
+    [[nodiscard]] ranges::any_view<EntityInterface*> get_all_entities() const override;
+    [[nodiscard]] size_t get_entity_count() const override;
 
     void reserve_slots(size_t n) override;
     void add_collider(EntityInterface& other) override;
     void update_structure() override;
 
 private:
-    std::vector<EntityInterface&> entities{};
+    std::vector<EntityInterface*> entities{};
 
 };
 

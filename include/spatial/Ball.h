@@ -10,8 +10,8 @@ struct Ball final : RegionInterface
     Ball(const Point center, const double radius): center(center), radius(radius) {};
     Ball(const double x, const double y, const double r): center(x, y), radius(r) {};
 
-    [[nodiscard]] inline bool contains(Point p) const override;
-    [[nodiscard]] inline Point get_centroid() const override;
+    [[nodiscard]] bool contains(Point p) const override;
+    [[nodiscard]] Point get_centroid() const override;
 
     Point center;
     double radius;

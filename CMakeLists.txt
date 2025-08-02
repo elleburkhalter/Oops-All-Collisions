@@ -10,10 +10,11 @@ option(WITH_TESTS "Build unit tests" ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(FetchContent)
+
 if (WITH_RAYLIB)
     # Dependencies
     set(RAYLIB_VERSION 5.5)
-    include(FetchContent)
     FetchContent_Declare(
             raylib
             URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
@@ -21,10 +22,19 @@ if (WITH_RAYLIB)
     FetchContent_MakeAvailable(raylib)
 endif()
 
+# Fetch Range-v3
+FetchContent_Declare(
+        range-v3
+        GIT_REPOSITORY https://github.com/ericniebler/range-v3.git
+        GIT_TAG 0.12.0   # Latest stable release as of now
+)
+
+FetchContent_MakeAvailable(range-v3)
+
 # Core library
 add_library(oops_core
         src/spatial/Ball.cpp
-        src/spatial/BoundingBox.cpp
+        src/spatial/OopsBoundingBox.cpp
         src/spatial/Point.cpp
         src/collision/BallCollider.cpp
         src/data_structures/BoundingVolumeHierarchy.cpp
@@ -32,16 +42,19 @@ add_library(oops_core
         src/data_structures/NaiveLinear.cpp
         src/data_structures/SpatialHash.cpp
         src/data_structures/SweepAndPrune.cpp
+        src/data_structures/ContainerInterface.cpp
+        src/collision/ColliderInterface.cpp
 )
-target_include_directories(oops_core PUBLIC include)
+target_include_directories(oops_core PUBLIC include ${range-v3_SOURCE_DIR}/include)
+target_link_libraries(oops_core PUBLIC range-v3)
 
 # Statistics tracking/logging library
 add_library(oops_statistics
         src/statistics/LoggerStatistics.cpp
         src/statistics/NullStatistics.cpp
 )
-target_link_libraries(oops_statistics PUBLIC oops_core)
-target_include_directories(oops_statistics PUBLIC include)
+target_include_directories(oops_statistics PUBLIC include ${range-v3_SOURCE_DIR}/include)
+target_link_libraries(oops_statistics PUBLIC oops_core range-v3)
 
 # Rendering & executable
 if (WITH_RAYLIB)
@@ -49,15 +62,15 @@ if (WITH_RAYLIB)
             src/renderer/NullRenderer.cpp
             src/renderer/RaylibRenderer.cpp
     )
-    target_link_libraries(oops_rendering PUBLIC oops_core raylib)
-    target_include_directories(oops_rendering PUBLIC include)
+    target_include_directories(oops_rendering PUBLIC include ${range-v3_SOURCE_DIR}/include)
+    target_link_libraries(oops_rendering PUBLIC oops_core raylib range-v3)
 
     add_executable(oops_executable app/simulation_main.cpp)
     target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
 else()
     add_library(oops_rendering src/renderer/NullRenderer.cpp)
-    target_link_libraries(oops_rendering PUBLIC oops_core)
-    target_include_directories(oops_rendering PUBLIC include)
+    target_include_directories(oops_rendering PUBLIC include ${range-v3_SOURCE_DIR}/include)
+    target_link_libraries(oops_rendering PUBLIC oops_core range-v3)
 
     add_executable(oops_executable app/headless_main.cpp)
     target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
