@@ -1,6 +1,7 @@
 //
 // Created by logan on 7/29/2025.
 //
+#include <renderer/RaylibRenderer.h>
 #include <renderer/RendererInterface.h>
 #include <unordered_map>
 
@@ -26,7 +27,7 @@ Color getBallColor(int collisionCount) {
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int main(void)
+int RaylibRenderer::start()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
