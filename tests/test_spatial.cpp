@@ -25,24 +25,24 @@ TEST_CASE("Collision conserves momentum and updates velocities correctly", "[bal
 
     // Resolve collision
     CollisionCode code = colliderA.resolve_collision_with(colliderB);
-    REQUIRE(code == CollisionCode::COLLISION_PRESENT);
+    CHECK(code == CollisionCode::COLLISION_PRESENT);
 
     //Total momentum after collision
     Point final_momentum = colliderA.get_momentum() + colliderB.get_momentum();
 
     //Total momentum conserved
-    REQUIRE(final_momentum.x == initial_momentum.x);
-    REQUIRE(final_momentum.y == initial_momentum.y);
+    CHECK(final_momentum.x == initial_momentum.x);
+    CHECK(final_momentum.y == initial_momentum.y);
 
     //Correct final velocities
-    REQUIRE_THAT(colliderA.get_velocity().x, WithinAbs(1.78, 0.01));
-    REQUIRE_THAT(colliderB.get_velocity().x, WithinAbs(3.68, 0.01));
-    REQUIRE_THAT(colliderA.get_velocity().y, WithinAbs(2.12, 0.01));
-    REQUIRE_THAT(colliderB.get_velocity().y, WithinAbs(-1.18, 0.01));
+    CHECK_THAT(colliderA.get_velocity().x, WithinAbs(1.78, 0.01));
+    CHECK_THAT(colliderB.get_velocity().x, WithinAbs(3.68, 0.01));
+    CHECK_THAT(colliderA.get_velocity().y, WithinAbs(2.12, 0.01));
+    CHECK_THAT(colliderB.get_velocity().y, WithinAbs(-1.18, 0.01));
 
     //Positions should move apart at least sum of radii
     double dist_after = Point::get_distance(colliderA.get_centroid(), colliderB.get_centroid());
-    REQUIRE(dist_after >= ballA.radius + ballB.radius);
+    CHECK(dist_after >= ballA.radius + ballB.radius);
 }
 
 TEST_CASE("Collision updates velocities correctly", "[ball_to_ball][velocity]") {
@@ -59,13 +59,13 @@ TEST_CASE("Collision updates velocities correctly", "[ball_to_ball][velocity]") 
     colliderB.set_velocity({2.2, 3.2});
 
     CollisionCode code = colliderA.resolve_collision_with(colliderB);
-    REQUIRE(code == CollisionCode::COLLISION_PRESENT);
+    CHECK(code == CollisionCode::COLLISION_PRESENT);
 
     //Correct final velocities
-    REQUIRE_THAT(colliderA.get_velocity().x, WithinAbs(-2.95, 0.01));
-    REQUIRE_THAT(colliderB.get_velocity().x, WithinAbs(5.45, 0.01));
-    REQUIRE_THAT(colliderA.get_velocity().y, WithinAbs(1.91, 0.01));
-    REQUIRE_THAT(colliderB.get_velocity().y, WithinAbs(4.01, 0.01));
+    CHECK_THAT(colliderA.get_velocity().x, WithinAbs(-2.95, 0.01));
+    CHECK_THAT(colliderB.get_velocity().x, WithinAbs(5.45, 0.01));
+    CHECK_THAT(colliderA.get_velocity().y, WithinAbs(1.91, 0.01));
+    CHECK_THAT(colliderB.get_velocity().y, WithinAbs(4.01, 0.01));
 }
 
 TEST_CASE("MultiLevelGrid detects collisions between ball objects", "[MultiLevelGrid][ball_to_ball]") {
@@ -90,10 +90,10 @@ TEST_CASE("MultiLevelGrid detects collisions between ball objects", "[MultiLevel
     // auto collisions = grid.get_collisions(entity1);
     //
     // //Should detect entity2 as collision and NOT entity3
-    // REQUIRE(std::find(collisions.begin(), collisions.end(), &entity2) != collisions.end());
-    // REQUIRE(std::find(collisions.begin(), collisions.end(), &entity3) == collisions.end());
+    // CHECK(std::find(collisions.begin(), collisions.end(), &entity2) != collisions.end());
+    // CHECK(std::find(collisions.begin(), collisions.end(), &entity3) == collisions.end());
     //
     // //Collisions for entity3 should be empty
     // auto collisions_for_3 = grid.get_collisions(entity3);
-    // REQUIRE(collisions_for_3.empty());
+    // CHECK(collisions_for_3.empty());
 }
