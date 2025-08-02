@@ -22,6 +22,13 @@ public:
     [[nodiscard]] virtual Point compute_impulse_with(ColliderInterface& other) const = 0;
     [[nodiscard]] virtual Point compute_position_correction_with(ColliderInterface& other) const = 0;
 
+    [[nodiscard]] Point get_velocity() const { return velocity; }
+    [[nodiscard]] double get_mass() const { return mass; }
+    [[nodiscard]] Point get_momentum() const { return get_mass() * get_velocity(); }
+
+    void set_mass(const double new_mass) { mass = new_mass;}
+    void set_velocity(const Point new_velocity) { velocity = new_velocity;}
+
     void update(double dt = 0.0);
 
 protected:

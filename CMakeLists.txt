@@ -45,7 +45,7 @@ add_library(oops_core
         src/data_structures/ContainerInterface.cpp
         src/collision/ColliderInterface.cpp
 )
-target_include_directories(oops_core PUBLIC include)
+target_include_directories(oops_core PUBLIC include ${range-v3_SOURCE_DIR}/include)
 target_link_libraries(oops_core PUBLIC range-v3)
 
 # Statistics tracking/logging library
@@ -53,8 +53,8 @@ add_library(oops_statistics
         src/statistics/LoggerStatistics.cpp
         src/statistics/NullStatistics.cpp
 )
-target_link_libraries(oops_statistics PUBLIC oops_core)
-target_include_directories(oops_statistics PUBLIC include)
+target_include_directories(oops_statistics PUBLIC include ${range-v3_SOURCE_DIR}/include)
+target_link_libraries(oops_statistics PUBLIC oops_core range-v3)
 
 # Rendering & executable
 if (WITH_RAYLIB)
@@ -62,15 +62,15 @@ if (WITH_RAYLIB)
             src/renderer/NullRenderer.cpp
             src/renderer/RaylibRenderer.cpp
     )
-    target_link_libraries(oops_rendering PUBLIC oops_core raylib)
-    target_include_directories(oops_rendering PUBLIC include)
+    target_include_directories(oops_rendering PUBLIC include ${range-v3_SOURCE_DIR}/include)
+    target_link_libraries(oops_rendering PUBLIC oops_core raylib range-v3)
 
     add_executable(oops_executable app/simulation_main.cpp)
     target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
 else()
     add_library(oops_rendering src/renderer/NullRenderer.cpp)
-    target_link_libraries(oops_rendering PUBLIC oops_core)
-    target_include_directories(oops_rendering PUBLIC include)
+    target_include_directories(oops_rendering PUBLIC include ${range-v3_SOURCE_DIR}/include)
+    target_link_libraries(oops_rendering PUBLIC oops_core range-v3)
 
     add_executable(oops_executable app/headless_main.cpp)
     target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
