@@ -16,8 +16,7 @@
 *
 ********************************************************************************************/
 
-#include "raylib.h"
-#include "game_object/interfaces/EntityABC.h"
+#include <raylib.h>
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -35,7 +34,6 @@ int main(void)
     //--------------------------------------------------------------------------------------
     bool onWelcomeScreen = true;
 
-    EntityABC exampleGuy1(screenWidth/2, screenHeight/2, 10);
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -47,7 +45,6 @@ int main(void)
         }
         //----------------------------------------------------------------------------------
         else {
-            exampleGuy1.playerControl();
         }
         //----------------------------------------------------------------------------------
         // Draw
@@ -70,7 +67,6 @@ int main(void)
             DrawCircleGradient(screenWidth - 700, screenHeight - 200, 150, SKYBLUE, DARKBLUE);
         } else {
             DrawText("move dude with keys", 10, 10, 20, DARKGRAY);
-            exampleGuy1.drawEntity();
             //DrawCircleV(ballPosition, 50, MAROON);
         }
 
