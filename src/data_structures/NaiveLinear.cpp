@@ -1,4 +1,4 @@
-#include <range/v3/iterator_range.hpp>
+#include <range/v3/view/subrange.hpp>
 #include <data_structures/NaiveLinear.h>
 
 void NaiveLinear::reserve_slots(const size_t n)
@@ -25,7 +25,7 @@ std::vector<EntityInterface*> NaiveLinear::get_collisions(const EntityInterface&
 }
 ranges::any_view<EntityInterface*> NaiveLinear::get_all_entities() const
 {
-    return ranges::make_iterator_range(this->entities.begin(), this->entities.end());
+    return ranges::subrange(this->entities.begin(), this->entities.end());
 }
 
 size_t NaiveLinear::get_entity_count() const

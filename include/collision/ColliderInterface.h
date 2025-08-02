@@ -2,7 +2,7 @@
 #define COLLIDERINTERFACE_H
 
 #include <spatial/Point.h>
-#include <spatial/BoundingBox.h>
+#include <spatial/OopsBoundingBox.h>
 #include <collision/ColliderFlags.h>
 
 class BallCollider;
@@ -15,7 +15,7 @@ public:
 
     // ----- Getters -----
     [[nodiscard]] virtual Point get_centroid() const = 0;
-    [[nodiscard]] virtual BoundingBox get_bounding_box() const = 0;
+    [[nodiscard]] virtual OopsBoundingBox get_bounding_box() const = 0;
 
     [[nodiscard]] virtual bool is_colliding_with(const ColliderInterface& other) const = 0;
     [[nodiscard]] virtual CollisionCode resolve_collision_with(ColliderInterface& other) = 0;

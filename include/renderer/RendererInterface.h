@@ -2,7 +2,7 @@
 #ifndef RENDERERINTERFACE_H
 #define RENDERERINTERFACE_H
 
-#include <spatial/BoundingBox.h>
+#include <spatial/OopsBoundingBox.h>
 #include <game_object/interfaces/AgentInterface.h>
 #include <game_object/interfaces/ProjectileInterface.h>
 #include <raylib.h>

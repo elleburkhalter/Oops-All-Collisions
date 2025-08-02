@@ -1,4 +1,4 @@
-#include <range/v3/iterator_range.hpp>
+#include <range/v3/view/subrange.hpp>
 #include <data_structures/MultiLevelGrid.h>
 
 // TODO: MLG Implementation
@@ -9,10 +9,10 @@ void MultiLevelGrid::MLGNode::split_node()
     if (!is_leaf()) throw std::runtime_error("Tried to split non-leaf node.");
 
     const Point center = bounding_box.get_centroid();
-    const BoundingBox ul_bbox{bounding_box.min.x, bounding_box.min.y, center.x, center.y};
-    const BoundingBox ur_bbox{center.x, bounding_box.min.y, bounding_box.max.x, center.y};
-    const BoundingBox bl_bbox{bounding_box.min.x, center.y, center.x, bounding_box.max.y};
-    const BoundingBox br_bbox{center.x, center.y, bounding_box.max.x, bounding_box.max.y};
+    const OopsBoundingBox ul_bbox{bounding_box.min.x, bounding_box.min.y, center.x, center.y};
+    const OopsBoundingBox ur_bbox{center.x, bounding_box.min.y, bounding_box.max.x, center.y};
+    const OopsBoundingBox bl_bbox{bounding_box.min.x, center.y, center.x, bounding_box.max.y};
+    const OopsBoundingBox br_bbox{center.x, center.y, bounding_box.max.x, bounding_box.max.y};
 
     ul_child = std::make_shared<MLGNode>(ul_bbox);
     ur_child = std::make_shared<MLGNode>(ur_bbox);
@@ -39,7 +39,7 @@ std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(con
 {
     if (!is_root()) throw std::runtime_error("Tried to raise non-root node.");
 
-    const uint8_t expand_idx = expand_left + expand_up << 1;
+    const uint8_t expand_idx = expand_left + (expand_up << 1);
 
     Point p_center;
 
@@ -61,12 +61,12 @@ std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(con
         break;
     }
 
-    const BoundingBox p_bbox = {{p_center.x - bounding_box.get_width(), p_center.y - bounding_box.get_height()}, {p_center.x + bounding_box.get_width(), p_center.y + bounding_box.get_height()}};
+    const OopsBoundingBox p_bbox = {{p_center.x - bounding_box.get_width(), p_center.y - bounding_box.get_height()}, {p_center.x + bounding_box.get_width(), p_center.y + bounding_box.get_height()}};
 
-    const BoundingBox ul_bbox{p_bbox.min.x, p_bbox.min.y, p_center.x, p_center.y};
-    const BoundingBox ur_bbox{p_center.x, p_bbox.min.y, p_bbox.max.x, p_center.y};
-    const BoundingBox bl_bbox{p_bbox.min.x, p_center.y, p_center.x, p_bbox.max.y};
-    const BoundingBox br_bbox{p_center.x, p_center.y, p_bbox.max.x, p_bbox.max.y};
+    const OopsBoundingBox ul_bbox{p_bbox.min.x, p_bbox.min.y, p_center.x, p_center.y};
+    const OopsBoundingBox ur_bbox{p_center.x, p_bbox.min.y, p_bbox.max.x, p_center.y};
+    const OopsBoundingBox bl_bbox{p_bbox.min.x, p_center.y, p_center.x, p_bbox.max.y};
+    const OopsBoundingBox br_bbox{p_center.x, p_center.y, p_bbox.max.x, p_bbox.max.y};
 
     const auto new_root = std::make_shared<MLGNode>(p_bbox);
 
@@ -122,7 +122,7 @@ std::weak_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::get_root()
     return root;
 }
 
-inline bool MultiLevelGrid::MLGNode::contains(const BoundingBox& bbox) const
+inline bool MultiLevelGrid::MLGNode::contains(const OopsBoundingBox& bbox) const
 {
     return this->bounding_box.min.x <= bbox.min.x &&
         this->bounding_box.max.x >= bbox.max.x &&
@@ -213,10 +213,10 @@ void MultiLevelGrid::reserve_slots(size_t n)
 }
 ranges::any_view<EntityInterface*> MultiLevelGrid::get_all_entities() const
 {
-    auto range = ranges::make_iterator_range(this->begin(), this->end());
+    auto range = ranges::subrange(this->begin(), this->end());
     return ranges::any_view<EntityInterface*>{range};
 }
-std::list<EntityInterface*> MultiLevelGrid::MLGNode::coarse_collision_recursive(const BoundingBox& bbox) const
+std::list<EntityInterface*> MultiLevelGrid::MLGNode::coarse_collision_recursive(const OopsBoundingBox& bbox) const
 {
     std::list<EntityInterface*> collisions{};
     if (contains(bbox)) collisions = this->entities;
@@ -234,7 +234,7 @@ std::vector<EntityInterface*> MultiLevelGrid::get_collisions(const EntityInterfa
 {
     std::vector<EntityInterface*> collisions{6};
     const ColliderInterface& collider = other.get_collider();
-    const BoundingBox bbox = collider.get_bounding_box();
+    const OopsBoundingBox bbox = collider.get_bounding_box();
 
     for (const std::list<EntityInterface*> candidates = this->root.coarse_collision_recursive(bbox); auto* candidate : candidates)
     {

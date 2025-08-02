@@ -13,7 +13,7 @@ public:
     explicit BallCollider(Ball other): collider_base(std::move(other)) {};
 
     [[nodiscard]] Point get_centroid() const override { return collider_base.get_centroid(); };
-    [[nodiscard]] BoundingBox get_bounding_box() const override;
+    [[nodiscard]] OopsBoundingBox get_bounding_box() const override;
 
     [[nodiscard]] inline CollisionCode resolve_collision_with(ColliderInterface& other) override;
     [[nodiscard]] inline bool is_colliding_with(const ColliderInterface& other) const override;

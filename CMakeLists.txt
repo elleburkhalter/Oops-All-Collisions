@@ -34,7 +34,7 @@ FetchContent_MakeAvailable(range-v3)
 # Core library
 add_library(oops_core
         src/spatial/Ball.cpp
-        src/spatial/BoundingBox.cpp
+        src/spatial/OopsBoundingBox.cpp
         src/spatial/Point.cpp
         src/collision/BallCollider.cpp
         src/data_structures/BoundingVolumeHierarchy.cpp

@@ -2,6 +2,7 @@
 #define ENTITYINTERFACE_H
 
 #include <cinttypes>
+#include <memory>
 #include <game_object/interfaces/EntityFlags.h>
 #include <collision/ColliderInterface.h>
 #include <spatial/Point.h>
@@ -43,7 +44,7 @@ public:
 
 private:
     ColliderInterface& collider;
-    uint8_t flags = EntityFlags::MovementEnabled | EntityFlags::CollisionEnabled;
+    std::uint8_t flags = EntityFlags::MovementEnabled | EntityFlags::CollisionEnabled;
     std::weak_ptr<void> tag{};
 };
 

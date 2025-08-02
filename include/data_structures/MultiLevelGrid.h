@@ -13,7 +13,7 @@ class MLGNode : std::enable_shared_from_this<MLGNode>
     public:
         class iterator;
         MLGNode() = delete;
-        explicit MLGNode(BoundingBox bounding_box): bounding_box(std::move(bounding_box)) {};
+        explicit MLGNode(OopsBoundingBox bounding_box): bounding_box(std::move(bounding_box)) {};
 
         // ----- Checkers -----
         [[nodiscard]] bool is_root() const { return parent.expired(); }
@@ -21,7 +21,7 @@ class MLGNode : std::enable_shared_from_this<MLGNode>
         [[nodiscard]] bool is_full() const { return entities.size() == SPLIT_SIZE; }
         [[nodiscard]] bool is_empty() const { return (is_leaf() && entities.empty()); }
         [[nodiscard]] bool can_delete_children() const { return !is_leaf() && ul_child->is_empty() && ur_child->is_empty() && bl_child->is_empty() && br_child->is_empty(); }
-        [[nodiscard]] inline bool contains(const BoundingBox& bbox) const;
+        [[nodiscard]] inline bool contains(const OopsBoundingBox& bbox) const;
         [[nodiscard]] inline bool contains(Point point) const;
 
         // ----- Getters -----
@@ -36,7 +36,7 @@ class MLGNode : std::enable_shared_from_this<MLGNode>
         [[nodiscard]] static iterator end();
 
         void insert(EntityInterface& entity);
-        std::list<EntityInterface*> coarse_collision_recursive(const BoundingBox& bbox) const;
+        std::list<EntityInterface*> coarse_collision_recursive(const OopsBoundingBox& bbox) const;
         bool insert_recursive(EntityInterface& entity);
         void delete_children();
 
@@ -55,7 +55,7 @@ class MLGNode : std::enable_shared_from_this<MLGNode>
 
         std::list<EntityInterface*> entities{};
 
-        BoundingBox bounding_box{};
+        OopsBoundingBox bounding_box{};
 
     public:
         class iterator

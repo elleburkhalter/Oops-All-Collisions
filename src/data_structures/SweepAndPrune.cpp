@@ -66,10 +66,10 @@ std::list<std::pair<EntityInterface*, EntityInterface*>> SweepAndPrune::get_all_
                 ColliderInterface& collider1 = current->get_collider();
                 ColliderInterface& collider2 = other->get_collider();
 
-                const BoundingBox bbox1 = collider1.get_bounding_box();
+                const OopsBoundingBox bbox1 = collider1.get_bounding_box();
 
                 // Guaranteed to overlap on x-axis by SAP; check y-axis
-                if (const BoundingBox bbox2 = collider2.get_bounding_box(); bbox1.max.y < bbox2.min.y || bbox1.min.y > bbox2.max.y)
+                if (const OopsBoundingBox bbox2 = collider2.get_bounding_box(); bbox1.max.y < bbox2.min.y || bbox1.min.y > bbox2.max.y)
                     continue;
 
                 // Narrow-phase collision

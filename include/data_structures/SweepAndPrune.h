@@ -26,7 +26,7 @@ private:
     {
         SAPLocation(EntityInterface& referer, const bool is_begin): referer(&referer), is_begin(is_begin)
         {
-            const BoundingBox bbox = referer.get_collider().get_bounding_box();
+            const OopsBoundingBox bbox = referer.get_collider().get_bounding_box();
             is_begin ? location = bbox.min.x : location = bbox.max.x;
         }
         std::unique_ptr<EntityInterface> referer;

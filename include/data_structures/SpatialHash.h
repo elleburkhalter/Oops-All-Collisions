@@ -34,8 +34,6 @@ private:
     struct hash_key_hasher;
 
     static constexpr double POSITION_TO_CELL = 1.0 / CELL_SIZE;
-    std::unordered_map<hash_key, std::list<EntityInterface*>, hash_key_hasher> cells;
-    [[nodiscard]] static hash_key compute_hash(const EntityInterface& other);
     size_t entity_count = 0;
 
     struct hash_key {
@@ -118,6 +116,9 @@ private:
         _outer_iter outer_end{};
         _inner_iter inner{};
     };
+
+    std::unordered_map<hash_key, std::list<EntityInterface*>, hash_key_hasher> cells;
+    [[nodiscard]] static hash_key compute_hash(const EntityInterface& other);
 };
 
 #endif //SPATIALHASH_H

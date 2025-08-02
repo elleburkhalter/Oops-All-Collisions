@@ -1,5 +1,4 @@
-#include <ranges>
-#include <range/v3/iterator_range.hpp>
+#include <range/v3/view/subrange.hpp>
 #include <range/v3/view/any_view.hpp>
 #include <data_structures/SpatialHash.h>
 
@@ -63,7 +62,7 @@ SpatialHash::hash_key SpatialHash::compute_hash(const EntityInterface& other)
 
 ranges::any_view<EntityInterface*> SpatialHash::get_all_entities() const
 {
-    auto range = ranges::make_iterator_range(this->begin(), this->end());
+    auto range = ranges::subrange(this->begin(), this->end());
     return ranges::any_view<EntityInterface*>{range};
 }
 
