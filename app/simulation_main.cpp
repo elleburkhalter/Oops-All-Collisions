@@ -22,7 +22,7 @@
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(){
-    RaylibRenderer* bPtr; // Base pointer pointing to a Derived object
-    bPtr->start(); // Calls Derived::display() at runtime
+    RaylibRenderer renderer;
+    renderer.start();
     
 }

@@ -9,6 +9,6 @@
 class RaylibRenderer
 {
     public:
-    virtual int start() = 0;
+    virtual int start();
 };
 #endif //RAYLIBRENDERER_H
