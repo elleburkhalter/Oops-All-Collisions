@@ -122,7 +122,7 @@ std::weak_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::get_root()
     return root;
 }
 
-inline bool MultiLevelGrid::MLGNode::contains(const OopsBoundingBox& bbox) const
+bool MultiLevelGrid::MLGNode::contains(const OopsBoundingBox& bbox) const
 {
     return this->bounding_box.min.x <= bbox.min.x &&
         this->bounding_box.max.x >= bbox.max.x &&
@@ -130,7 +130,7 @@ inline bool MultiLevelGrid::MLGNode::contains(const OopsBoundingBox& bbox) const
         this->bounding_box.max.y >= bbox.max.y;
 }
 
-inline bool MultiLevelGrid::MLGNode::contains(const Point point) const
+bool MultiLevelGrid::MLGNode::contains(const Point point) const
 {
     return this->bounding_box.contains(point);
 }

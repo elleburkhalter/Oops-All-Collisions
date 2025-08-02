@@ -8,19 +8,19 @@ struct Point
 
     static double get_distance_sq(Point p1, Point p2);
     static double get_distance(Point p1, Point p2);
-    [[nodiscard]] inline double get_distance_sq(Point other) const;  // Intentionally not by reference; small struct :)
-    [[nodiscard]] inline double get_distance(Point other) const;
+    [[nodiscard]] double get_distance_sq(Point other) const;  // Intentionally not by reference; small struct :)
+    [[nodiscard]] double get_distance(Point other) const;
 
-    inline Point operator+(Point other) const;
-    inline Point operator-(Point other) const;
-    inline Point operator+=(Point other);
-    inline Point operator-=(Point other);
-    inline Point operator*(double scalar) const;
-    inline Point operator/(double scalar) const;
-    inline Point operator*=(double scalar);
-    inline Point operator/=(double scalar);
-    inline bool operator==(Point other) const;
-    inline bool operator!=(Point other) const;
+    Point operator+(Point other) const;
+    Point operator-(Point other) const;
+    Point operator+=(Point other);
+    Point operator-=(Point other);
+    Point operator*(double scalar) const;
+    Point operator/(double scalar) const;
+    Point operator*=(double scalar);
+    Point operator/=(double scalar);
+    bool operator==(Point other) const;
+    bool operator!=(Point other) const;
 
     double x;
     double y;

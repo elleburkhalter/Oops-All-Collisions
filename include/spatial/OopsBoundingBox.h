@@ -11,17 +11,17 @@ struct OopsBoundingBox final : RegionInterface
     OopsBoundingBox(const double min_x, const double min_y, const double max_x, const double max_y): min(min_x, min_y), max(max_x, max_y) {};
 
     // ----- Checkers -----
-    [[nodiscard]] inline bool contains(Point p) const override;
+    [[nodiscard]] bool contains(Point p) const override;
 
     // ----- Getters -----
-    [[nodiscard]] inline Point get_centroid() const override;
-    [[nodiscard]] inline double get_width() const;
-    [[nodiscard]] inline double get_height() const;
+    [[nodiscard]] Point get_centroid() const override;
+    [[nodiscard]] double get_width() const;
+    [[nodiscard]] double get_height() const;
 
-    [[nodiscard]] inline Point get_ul() const;
-    [[nodiscard]] inline Point get_br() const;
-    [[nodiscard]] inline Point get_ur() const;
-    [[nodiscard]] inline Point get_bl() const;
+    [[nodiscard]] Point get_ul() const;
+    [[nodiscard]] Point get_br() const;
+    [[nodiscard]] Point get_ur() const;
+    [[nodiscard]] Point get_bl() const;
 
     Point min;
     Point max;

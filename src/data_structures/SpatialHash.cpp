@@ -66,7 +66,7 @@ ranges::any_view<EntityInterface*> SpatialHash::get_all_entities() const
     return ranges::any_view<EntityInterface*>{range};
 }
 
-inline size_t SpatialHash::get_entity_count() const
+size_t SpatialHash::get_entity_count() const
 {
     return entity_count;
 }

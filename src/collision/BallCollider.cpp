@@ -1,7 +1,7 @@
 #include <cmath>
 #include <collision/BallCollider.h>
 
-inline CollisionCode BallCollider::resolve_collision_with(ColliderInterface& other)
+CollisionCode BallCollider::resolve_collision_with(ColliderInterface& other)
 {
     return other.resolve_collision_with_ball(*this);
 }

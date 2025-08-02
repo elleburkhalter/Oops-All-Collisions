@@ -21,8 +21,8 @@ class MLGNode : std::enable_shared_from_this<MLGNode>
         [[nodiscard]] bool is_full() const { return entities.size() == SPLIT_SIZE; }
         [[nodiscard]] bool is_empty() const { return (is_leaf() && entities.empty()); }
         [[nodiscard]] bool can_delete_children() const { return !is_leaf() && ul_child->is_empty() && ur_child->is_empty() && bl_child->is_empty() && br_child->is_empty(); }
-        [[nodiscard]] inline bool contains(const OopsBoundingBox& bbox) const;
-        [[nodiscard]] inline bool contains(Point point) const;
+        [[nodiscard]] bool contains(const OopsBoundingBox& bbox) const;
+        [[nodiscard]] bool contains(Point point) const;
 
         // ----- Getters -----
         [[nodiscard]] std::weak_ptr<MLGNode> get_parent() const { return parent; }
