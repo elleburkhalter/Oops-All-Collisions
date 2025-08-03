@@ -6,7 +6,7 @@
 #include <spatial/Ball.h>
 #include <game_object/interfaces/AgentInterface.h>
 #include <game_object/interfaces/ProjectileInterface.h>
-#include <ui_object/Text.h>
+#include <renderer/ui_object/Text.h>
 
 // This will be the abstract base class responsible for providing
 // an interface for a visualization renderer (i.e. see the program
