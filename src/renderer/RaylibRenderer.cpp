@@ -12,6 +12,8 @@ RaylibRenderer::RaylibRenderer()
     const int screen_width = GetMonitorHeight(monitor);
     const int screen_height = GetMonitorWidth(monitor);
 
+    view_area = OopsBoundingBox{-static_cast<double>(screen_width) / 2, -static_cast<double>(screen_height) / 2, static_cast<double>(screen_width) / 2, static_cast<double>(screen_height) / 2};
+
     InitWindow(screen_width, screen_height, "Collision Project");
     SetTargetFPS(60);
 }
@@ -21,6 +23,56 @@ RaylibRenderer::~RaylibRenderer()
 {
     CloseWindow();
 }
+
+void RaylibRenderer::update_view_area()
+{
+    const double screen_aspect_ratio = get_screen_height() / get_screen_width();
+
+    if (const double view_area_aspect_ratio = view_area.get_height() / view_area.get_width(); screen_aspect_ratio != view_area_aspect_ratio)
+    {
+        // Window changed size, so update view_area height accordingly.
+        const double target_height = view_area.get_width() * screen_aspect_ratio;
+        const double current_height = view_area.get_height();
+        const double y_offset = 0.5 * (target_height - current_height);
+
+        view_area.min.y -= y_offset;
+        view_area.max.y += y_offset;
+    }
+}
+
+
+void RaylibRenderer::draw_box(const OopsBoundingBox& bounding_box)
+{
+    const auto screen_width = get_screen_height();
+    const auto screen_height = get_screen_width();
+
+    const Point draw_scale = {screen_width * bounding_box.get_width() / view_area.get_width(), screen_height * bounding_box.get_height() / view_area.get_height()};
+    const Point top_coord = screen_width * (bounding_box.min - view_area.min) / view_area.get_width();
+    const Point bottom_coord = top_coord + draw_scale;
+
+    DrawRectangle(static_cast<int>(top_coord.x), static_cast<int>(top_coord.y), static_cast<int>(bottom_coord.x), static_cast<int>(bottom_coord.y), GREEN);
+}
+
+void RaylibRenderer::draw_point(const Point point)
+{
+    const Point to_draw = get_screen_width() * (point - view_area.min) / view_area.get_width();;
+    DrawCircle(static_cast<int>(to_draw.x), static_cast<int>(to_draw.y), 1.0, RED);
+}
+
+void RaylibRenderer::draw_circle(const Ball ball)
+{
+    const double world_scale = get_screen_width() / view_area.get_width();
+    const Point center = (ball.center - view_area.min) * world_scale;
+    const double radius = ball.radius * world_scale;
+
+    DrawCircleLines(static_cast<int>(center.x), static_cast<int>(center.y), static_cast<int>(radius), YELLOW);
+}
+
+void RaylibRenderer::draw_text(const RaylibText& text)
+{
+    text.draw(WHITE);
+}
+
 
 void RaylibRenderer::render_title_screen()
 {

@@ -46,6 +46,7 @@ add_library(oops_core
         src/collision/ColliderInterface.cpp
         src/renderer/NullRenderer.cpp
         include/renderer/ui_object/text/NullText.h
+        src/event_loop/StateMachine.cpp
 )
 target_include_directories(oops_core PUBLIC include ${range-v3_SOURCE_DIR}/include)
 target_link_libraries(oops_core PUBLIC range-v3)
