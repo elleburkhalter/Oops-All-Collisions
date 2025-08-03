@@ -7,11 +7,10 @@
 #include <range/v3/view/any_view.hpp>
 #include <game_object/interfaces/EntityInterface.h>
 
-class ContainerInterface
+class ContainerInterface : public DebugDrawableInterface
 {
 public:
     ContainerInterface() = default;
-    virtual ~ContainerInterface() = default;
 
     // ----- Getters -----
     [[nodiscard]] virtual std::vector<EntityInterface*> get_collisions(const EntityInterface& other) const { throw std::runtime_error{"Container implementation does not support single-collision lookups."}; };

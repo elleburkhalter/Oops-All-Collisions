@@ -29,6 +29,8 @@ public:
     static constexpr double AVERAGE_AGENT_OVERLAP = 1.5;
     static constexpr double CELL_SIZE = 16.0;
 
+    void draw_debug(RendererInterface& renderer) const override;
+
 private:
 
     struct hash_key;
@@ -67,7 +69,7 @@ private:
         iterator& operator=(iterator&&) noexcept = default;
         ~iterator() noexcept = default;
 
-        iterator(const _outer_iter outer, const _outer_iter outer_end)
+        iterator(const _outer_iter& outer, const _outer_iter& outer_end)
             : outer(outer), outer_end(outer_end)
         {
             if (outer != outer_end) {

@@ -4,14 +4,14 @@
 #include <spatial/Point.h>
 #include <spatial/OopsBoundingBox.h>
 #include <collision/ColliderFlags.h>
+#include <renderer/draw/DebugDrawableInterface.h>
 
 class BallCollider;
 
-class ColliderInterface
+class ColliderInterface : public DebugDrawableInterface
 {
 public:
     explicit ColliderInterface(const double mass = 1.0, const double coeff_of_restitution = 1.0): mass(mass), coefficient_of_restitution(coeff_of_restitution) {};
-    virtual ~ColliderInterface() = default;
 
     // ----- Getters -----
     [[nodiscard]] virtual Point get_centroid() const = 0;

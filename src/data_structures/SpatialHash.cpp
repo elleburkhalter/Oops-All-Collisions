@@ -71,4 +71,18 @@ size_t SpatialHash::get_entity_count() const
     return entity_count;
 }
 
+void SpatialHash::draw_debug(RendererInterface& renderer) const
+{
+    for (auto& [key, colliders] : cells)
+    {
+        OopsBoundingBox bbox{key.x * CELL_SIZE, key.y * CELL_SIZE, (key.x + 1) * CELL_SIZE, (key.y + 1) * CELL_SIZE};
+        bbox.draw_debug(renderer);
+
+        for (const EntityInterface* entity : colliders)
+        {
+            entity->get_collider().draw_debug(renderer);
+        }
+    }
+}
+
 

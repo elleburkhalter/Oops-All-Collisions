@@ -9,7 +9,7 @@
 
 class MultiLevelGrid final : public ContainerInterface
 {
-class MLGNode : std::enable_shared_from_this<MLGNode>
+class MLGNode final : public DebugDrawableInterface, std::enable_shared_from_this<MLGNode>
     {
     public:
         class iterator;
@@ -40,6 +40,8 @@ class MLGNode : std::enable_shared_from_this<MLGNode>
         std::list<EntityInterface*> coarse_collision_recursive(const OopsBoundingBox& bbox) const;
         bool insert_recursive(EntityInterface& entity);
         void delete_children();
+
+        void draw_debug(RendererInterface& renderer) const override;
 
         static constexpr size_t SPLIT_SIZE = 10;
     private:
@@ -160,6 +162,8 @@ public:
     void reserve_slots(size_t n) override;
     void add_collider(EntityInterface& other) override;
     void update_structure() override;
+
+    void draw_debug(RendererInterface& renderer) const override;
 
     MLGNode::iterator begin() const;
     MLGNode::iterator end() const;

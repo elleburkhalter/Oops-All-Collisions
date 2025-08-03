@@ -21,6 +21,8 @@ public:
     void post_bulk_add_callback() override;
     void update_structure() override;
 
+    void draw_debug(RendererInterface& renderer) const override;
+
 private:
     struct SAPLocation
     {

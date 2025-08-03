@@ -32,3 +32,8 @@ size_t NaiveLinear::get_entity_count() const
 {
     return this->entities.size();
 }
+void NaiveLinear::draw_debug(RendererInterface& renderer) const
+{
+    for (const EntityInterface* entity : this->get_all_entities()) entity->get_collider().draw_debug(renderer);
+}
+

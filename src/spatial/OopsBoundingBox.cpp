@@ -36,4 +36,8 @@ Point OopsBoundingBox::get_ur() const
 {
     return {max.x, min.y};
 }
+void OopsBoundingBox::draw_debug(RendererInterface& renderer) const
+{
+    renderer.draw_bounding_box(*this);
+}
 

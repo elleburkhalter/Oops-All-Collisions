@@ -20,6 +20,8 @@ public:
     void add_collider(EntityInterface& other) override;
     void update_structure() override;
 
+    void draw_debug(RendererInterface& renderer) const override;
+
 private:
     std::vector<EntityInterface*> entities{};
 

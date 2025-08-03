@@ -94,5 +94,11 @@ OopsBoundingBox BallCollider::get_bounding_box() const
     };
 }
 
+void BallCollider::draw_debug(RendererInterface& renderer) const
+{
+    renderer.draw_point(this->get_centroid());
+    renderer.draw_circle(this->collider_base);
+}
+
 
 

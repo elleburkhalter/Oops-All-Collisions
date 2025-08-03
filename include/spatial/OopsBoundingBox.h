@@ -3,8 +3,9 @@
 
 #include <spatial/Point.h>
 #include <spatial/RegionInterface.h>
+#include <renderer/draw/DebugDrawableInterface.h>
 
-struct OopsBoundingBox final : RegionInterface
+struct OopsBoundingBox final : RegionInterface, DebugDrawableInterface
 {
     OopsBoundingBox() = default;
     OopsBoundingBox(const Point min, const Point max): min(min), max(max) {};
@@ -22,6 +23,8 @@ struct OopsBoundingBox final : RegionInterface
     [[nodiscard]] Point get_br() const;
     [[nodiscard]] Point get_ur() const;
     [[nodiscard]] Point get_bl() const;
+
+    void draw_debug(RendererInterface& renderer) const override;
 
     Point min;
     Point max;

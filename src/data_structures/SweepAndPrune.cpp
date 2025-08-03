@@ -96,3 +96,12 @@ size_t SweepAndPrune::get_entity_count() const
 {
     return this->entities.size() / 2;
 }
+
+void SweepAndPrune::draw_debug(RendererInterface& renderer) const
+{
+    for (const EntityInterface* entity : this->get_all_entities())
+    {
+        entity->get_collider().draw_debug(renderer);
+    }
+}
+

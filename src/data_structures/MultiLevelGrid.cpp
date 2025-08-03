@@ -303,3 +303,20 @@ void MultiLevelGrid::update_structure()
     }
 }
 
+void MultiLevelGrid::MLGNode::draw_debug(RendererInterface& renderer) const
+{
+    renderer.draw_box(this->bounding_box);
+    if (!this->is_leaf())
+    {
+        this->ul_child->draw_debug(renderer);
+        this->ur_child->draw_debug(renderer);
+        this->bl_child->draw_debug(renderer);
+        this->br_child->draw_debug(renderer);
+    }
+}
+
+void MultiLevelGrid::draw_debug(RendererInterface& renderer) const
+{
+    for (const EntityInterface* entity : this->get_all_entities()) entity->get_collider().draw_debug(renderer);
+    this->root.draw_debug(renderer);
+}

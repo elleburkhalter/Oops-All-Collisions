@@ -20,6 +20,8 @@ public:
     [[nodiscard]] Point compute_position_correction_with(ColliderInterface& other) const override;
     [[nodiscard]] Point compute_impulse_with(ColliderInterface& other) const override;
 
+    void draw_debug(RendererInterface& renderer) const override;
+
 protected:
     [[nodiscard]] CollisionCode resolve_collision_with_ball(BallCollider& other) override;
     [[nodiscard]] bool is_colliding_with_ball(const BallCollider& other) const override;
