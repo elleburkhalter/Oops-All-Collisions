@@ -6,7 +6,7 @@
 #include <spatial/Ball.h>
 #include <game_object/interfaces/AgentInterface.h>
 #include <game_object/interfaces/ProjectileInterface.h>
-#include <renderer/ui_object/Text.h>
+#include <renderer/ui_object/text/TextInterface.h>
 
 // This will be the abstract base class responsible for providing
 // an interface for a visualization renderer (i.e. see the program
@@ -29,7 +29,7 @@ public:
     virtual void draw_box(const OopsBoundingBox& bounding_box) = 0;
     virtual void draw_point(Point point) = 0;
     virtual void draw_circle(Ball ball) = 0;
-    virtual void draw_text(const Text& text) = 0;
+    virtual void draw_text(const TextInterface& text) = 0;
 };
 
 #endif //RENDERERINTERFACE_H
