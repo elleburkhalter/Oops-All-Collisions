@@ -1,5 +1,6 @@
 #include <renderer/RaylibRenderer.h>
 #include <raylib.h>
+#include <renderer/ui_object/text/RaylibText.h>
 
 RaylibRenderer::RaylibRenderer()
 {
@@ -23,15 +24,27 @@ RaylibRenderer::~RaylibRenderer()
 
 void RaylibRenderer::render_title_screen()
 {
-    DrawText("Oops! All Collisions",(screenWidth - MeasureText("Oops! All Collisions", 120)) / 2,screenHeight / 2 - 250,120, BLUE);
-    DrawText("Created by Logan Dapp, Derrick Davison, and Elle Burkhalter",(screenWidth - MeasureText("Created by Logan Dapp, Derrick Davison, and Elle Burkhalter", 50)) / 2,screenHeight / 2 - 120, 50, GREEN);
-    DrawText("Click anywhere to begin...",(screenWidth - MeasureText("Click anywhere to begin...", 40)) / 2,screenHeight / 2 + 40,40, ORANGE);
-    //Border
-    //DrawRectangleLinesEx((Rectangle) {screenWidth / 2 - 1000,screenHeight / 2 - 500, 2000, 850 },6, SKYBLUE);
-    //Effects
-    DrawCircleGradient(screenWidth/4, screenHeight/2 + 200, 100, PINK, RED);
-    DrawCircleGradient(screenWidth/8, screenHeight/2 + 600, 350, YELLOW, ORANGE);
-    DrawCircleGradient(screenWidth - 350, screenHeight - 1200, 200, MAGENTA, DARKPURPLE);
-    DrawCircleGradient(screenWidth - 700, screenHeight - 200, 150, SKYBLUE, DARKBLUE);
+    RaylibText title_text{"Oop! All Collisions", 120, {0, -250}};
+    title_text.set_alignment(TextAlignment::UC);
+    title_text.set_anchor(TextLocation::MC_RELATIVE);
+    title_text.draw(BLUE);
+
+    RaylibText author_text{"Created by Logan Dapp, Derrick Davison, and Elle Burkhalter", 40, {0, -120}};
+    author_text.set_alignment(TextAlignment::UC);
+    author_text.set_anchor(TextLocation::MC_RELATIVE);
+    author_text.draw(ORANGE);
+
+    RaylibText continue_text{"Click anywhere to begin...", 40, {0, 40}};
+    continue_text.set_alignment(TextAlignment::UC);
+    continue_text.set_anchor(TextLocation::MC_RELATIVE);
+    continue_text.draw(ORANGE);
+
+    const int screen_width = GetScreenWidth();
+    const int screen_height = GetScreenHeight();
+
+    DrawCircleGradient(screen_width/4, screen_height/2 + 200, 100, PINK, RED);
+    DrawCircleGradient(screen_width/8, screen_height/2 + 600, 350, YELLOW, ORANGE);
+    DrawCircleGradient(screen_width - 350, screen_height - 1200, 200, MAGENTA, DARKPURPLE);
+    DrawCircleGradient(screen_width - 700, screen_height - 200, 150, SKYBLUE, DARKBLUE);
 }
 
