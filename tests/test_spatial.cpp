@@ -97,6 +97,46 @@ TEST_CASE("MultiLevelGrid returns correct collision pairs", "[MultiLevelGrid]") 
     CHECK((e1 == &entityA && e2 == &entityB) || (e1 == &entityB && e2 == &entityA));
 }
 
+TEST_CASE("Update_structure correctly rebinds to detect new collisions", "[MultiLevelGrid]") {
+    MultiLevelGrid grid;
+
+    BallCollider colliderA(Ball({212.8, 312.8}, 4.3));
+    AgentInterface entityA(colliderA);
+    entityA.set_position({212.8, 312.8});
+
+    BallCollider colliderB(Ball({14.4, 156.0}, 5.4));
+    AgentInterface entityB(colliderB);
+    entityB.set_position({14.4, 156.0});
+
+    grid.add_collider(entityA);
+    grid.add_collider(entityB);
+
+    //Move entityA into entityB
+    entityA.set_position({14.1, 156.1});
+    grid.update_structure();
+
+    auto collisions = grid.get_all_collisions();
+    CHECK(collisions.size() == 1);
+}
+
+TEST_CASE("MultiLevelGrid with no collisions", "[MultiLevelGrid]") {
+    MultiLevelGrid grid;
+
+    BallCollider colliderA(Ball({111.1, 9.9}, 17.3));
+    AgentInterface entityA(colliderA);
+    entityA.set_position({111.1, 9.9});
+
+    BallCollider colliderB(Ball({200.3, 204.0}, 12.5));
+    AgentInterface entityB(colliderB);
+    entityB.set_position({200.3, 204.0});
+
+    grid.add_collider(entityA);
+    grid.add_collider(entityB);
+
+    auto collisions = grid.get_all_collisions();
+    CHECK(collisions.empty());
+}
+
 TEST_CASE("MultiLevelGrid detects collisions between ball objects", "[MultiLevelGrid][ball_to_ball]") {
     // MultiLevelGrid grid;
     //
