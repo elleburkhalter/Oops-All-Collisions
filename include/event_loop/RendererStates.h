@@ -1,0 +1,10 @@
+#ifndef RENDERERSTATES_H
+#define RENDERERSTATES_H
+
+enum RendererState : int
+{
+    TITLE_SCREEN_STATE,
+    ACTIVE_GAME_STATE,
+};
+
+#endif //RENDERERSTATES_H
