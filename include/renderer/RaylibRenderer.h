@@ -3,12 +3,17 @@
 #define RAYLIBRENDERER_H
 
 #include <raylib.h>
+#include <renderer/ui_object/Text.h>
 #include <renderer/RendererInterface.h>
+#include <event_loop/StateMachine.h>
 
 // This will implement RendererInterface interface to allow for visualization with
 // Raylib.
 class RaylibRenderer final : public RendererInterface
 {
+    RaylibRenderer();
+    ~RaylibRenderer() override;
+
     void draw_agent(const AgentInterface& agent) override;
     void draw_projectile(const ProjectileInterface& projectile) override;
 
@@ -16,6 +21,12 @@ class RaylibRenderer final : public RendererInterface
     void draw_point(Point point) override;
     void draw_circle(Ball ball) override;
     void draw_text(const Text& text) override;
+
+private:
+    void render_title_screen();
+    void render_game_screen();
+
+    StateMachine game_state{};
 
 };
 #endif //RAYLIBRENDERER_H

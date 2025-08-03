@@ -12,6 +12,8 @@
 // an interface for a visualization renderer (i.e. see the program
 // with Raylib or use a NullRenderer to turn it off).
 
+struct OopsBoundingBox;
+
 class RendererInterface
 {
 public:
