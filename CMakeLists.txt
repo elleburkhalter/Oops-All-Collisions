@@ -44,6 +44,8 @@ add_library(oops_core
         src/data_structures/SweepAndPrune.cpp
         src/data_structures/ContainerInterface.cpp
         src/collision/ColliderInterface.cpp
+        src/renderer/NullRenderer.cpp
+        include/renderer/ui_object/text/NullText.h
 )
 target_include_directories(oops_core PUBLIC include ${range-v3_SOURCE_DIR}/include)
 target_link_libraries(oops_core PUBLIC range-v3)
@@ -59,8 +61,8 @@ target_link_libraries(oops_statistics PUBLIC oops_core range-v3)
 # Rendering & executable
 if (WITH_RAYLIB)
     add_library(oops_rendering
-            src/renderer/NullRenderer.cpp
             src/renderer/RaylibRenderer.cpp
+            src/renderer/ui_object/text/RaylibText.cpp
     )
     target_include_directories(oops_rendering PUBLIC include ${range-v3_SOURCE_DIR}/include)
     target_link_libraries(oops_rendering PUBLIC oops_core raylib range-v3)
@@ -68,12 +70,8 @@ if (WITH_RAYLIB)
     add_executable(oops_executable app/simulation_main.cpp)
     target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
 else()
-    add_library(oops_rendering src/renderer/NullRenderer.cpp)
-    target_include_directories(oops_rendering PUBLIC include ${range-v3_SOURCE_DIR}/include)
-    target_link_libraries(oops_rendering PUBLIC oops_core range-v3)
-
     add_executable(oops_executable app/headless_main.cpp)
-    target_link_libraries(oops_executable PRIVATE oops_rendering oops_statistics)
+    target_link_libraries(oops_executable PRIVATE oops_statistics)
 endif()
 
 # Mac frameworks
