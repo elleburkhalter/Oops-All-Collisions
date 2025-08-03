@@ -53,6 +53,7 @@ int RaylibRenderer::start()
         else {
             //inputs and logic during game loop go here
             //instantiate entities here
+            AgentInterface neo();
         }
         //----------------------------------------------------------------------------------
         // Draw
