@@ -68,6 +68,35 @@ TEST_CASE("Collision updates velocities correctly", "[ball_to_ball][velocity]") 
     CHECK_THAT(colliderB.get_velocity().y, WithinAbs(4.01, 0.01));
 }
 
+TEST_CASE("MultiLevelGrid returns correct collision pairs", "[MultiLevelGrid]") {
+    MultiLevelGrid grid;
+
+    BallCollider colliderA(Ball({9.9, 9.9}, 11.3));
+    AgentInterface entityA(colliderA);
+    entityA.set_position({9.9, 9.9});
+    entityA.set_velocity({12.2, 0.3});
+
+    BallCollider colliderB(Ball({8.2, 10.0}, 0.7));  //Collides with entityA
+    AgentInterface entityB(colliderB);
+    entityB.set_position({8.2, 10.0});
+    entityB.set_velocity({3.3, 0.0});
+
+    BallCollider colliderC(Ball({101.4, 43.8}, 13.5));  //No collision
+    AgentInterface entityC(colliderC);
+    entityC.set_position({101.4, 43.8});
+    entityC.set_velocity({1.1, -1.1});
+
+    grid.add_collider(entityA);
+    grid.add_collider(entityB);
+    grid.add_collider(entityC);
+
+    auto collisions = grid.get_all_collisions();
+
+    REQUIRE(collisions.size() == 1);
+    auto [e1, e2] = collisions.front();
+    CHECK((e1 == &entityA && e2 == &entityB) || (e1 == &entityB && e2 == &entityA));
+}
+
 TEST_CASE("MultiLevelGrid detects collisions between ball objects", "[MultiLevelGrid][ball_to_ball]") {
     // MultiLevelGrid grid;
     //
