@@ -3,6 +3,7 @@
 
 #include <range/v3/view/any_view.hpp>
 #include <unordered_map>
+#include <list>
 #include <data_structures/ContainerInterface.h>
 
 class SpatialHash final : public ContainerInterface

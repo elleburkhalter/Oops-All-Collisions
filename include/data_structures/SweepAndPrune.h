@@ -1,6 +1,6 @@
 #ifndef SWEEPANDPRUNE_H
 #define SWEEPANDPRUNE_H
-
+#include <list>
 #include <range/v3/view/any_view.hpp>
 #include <data_structures/ContainerInterface.h>
 

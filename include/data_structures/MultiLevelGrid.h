@@ -5,6 +5,7 @@
 
 #include <utility>
 #include <stack>
+#include <list>
 
 class MultiLevelGrid final : public ContainerInterface
 {
