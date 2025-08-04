@@ -26,6 +26,7 @@ public:
     virtual void initialize() = 0;
     virtual void update_collisions();
     virtual void update_entities(double dt);
+    virtual void update_hook() {};
     virtual void render();
 
     virtual void instantiate_entities(size_t count);

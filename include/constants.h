@@ -24,7 +24,8 @@
 #define PERCENT_POSITION_CORRECTION_PER_FRAME 0.2;
 #define ALLOWABLE_PENETRATION_SLOP 0.01;
 
-// For simulation
+// =========== FOR SIMULATION ==========
 #define N_ENTITIES 100
+#define SCROLL_ZOOM_SPEED 0.1
 
 #endif //CONSTANTS_H

@@ -59,6 +59,7 @@ void GameLoopInterface::run()
             this->update_collisions();
             const double dt = get_dt();
             this->update_entities(dt);
+            this->update_hook();
         }
         this->render();
     }

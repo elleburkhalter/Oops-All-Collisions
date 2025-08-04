@@ -1,5 +1,6 @@
 #include <renderer/RaylibRenderer.h>
 #include <raylib.h>
+#include <cmath>
 #include <renderer/ui_object/text/RaylibText.h>
 
 RaylibRenderer::RaylibRenderer()
@@ -38,6 +39,42 @@ void RaylibRenderer::update_view_area()
         view_area.min.y -= y_offset;
         view_area.max.y += y_offset;
     }
+}
+
+void RaylibRenderer::unset_last_point()
+{
+    last_point = std::nullopt;
+}
+
+void RaylibRenderer::move_view_area(double x, double y)
+{
+    update_view_area();
+
+    if (last_point == std::nullopt)
+    {
+        last_point = {x, y};
+        return;
+    }
+
+    const double view_area_conversion = view_area.get_width() / get_screen_width();
+
+    const double dx = (x - last_point->x) * view_area_conversion;
+    const double dy = (y - last_point->y) * view_area_conversion;
+
+    view_area = {view_area.min.x + dx, view_area.min.y + dy, view_area.max.x + dx, view_area.max.y + dy};
+}
+
+
+void RaylibRenderer::zoom_view_area(const double scroll_amount)
+{
+    update_view_area();
+
+    const double multiplier = std::exp(-scroll_amount * ZOOM_SPEED);
+    const Point center = view_area.get_centroid();
+    const double width = view_area.get_width();
+    const double height = view_area.get_height();
+
+    view_area = OopsBoundingBox{center.x - width * multiplier * 0.5, center.y - height * multiplier * 0.5, center.x + width * multiplier * 0.5, center.y + height * multiplier * 0.5};
 }
 
 

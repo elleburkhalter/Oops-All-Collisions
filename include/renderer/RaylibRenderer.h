@@ -2,10 +2,12 @@
 #ifndef RAYLIBRENDERER_H
 #define RAYLIBRENDERER_H
 
+#include <optional>
 #include <raylib.h>
 #include <renderer/ui_object/text/RaylibText.h>
 #include <renderer/RendererInterface.h>
 #include <event_loop/StateMachine.h>
+#include <constants.h>
 
 // This will implement RendererInterface interface to allow for visualization with
 // Raylib.
@@ -26,11 +28,16 @@ public:
     void draw_text(const TextInterface& text) override;
 
     void update_view_area();
+    void zoom_view_area(double scroll_amount);
+    void move_view_area(double x, double y);
+    void unset_last_point();
 
     void draw_title_screen() const override;
 private:
+    static constexpr double ZOOM_SPEED = SCROLL_ZOOM_SPEED;
+
     OopsBoundingBox view_area;
     StateMachine game_state{};
-
+    std::optional<Point> last_point = std::nullopt;
 };
 #endif //RAYLIBRENDERER_H
