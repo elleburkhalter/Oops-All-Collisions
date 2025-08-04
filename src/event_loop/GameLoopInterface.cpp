@@ -40,6 +40,7 @@ void GameLoopInterface::render_title_screen()
 
 void GameLoopInterface::render()
 {
+    this->renderer.before_draw();
     if (state_machine.get_state<GameState>() == GameState::TITLE_SCREEN_STATE)
     {
         this->render_title_screen();
@@ -48,6 +49,7 @@ void GameLoopInterface::render()
     {
         this->render_game();
     }
+    this->renderer.after_draw();
 }
 
 void GameLoopInterface::run()

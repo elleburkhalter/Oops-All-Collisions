@@ -13,7 +13,6 @@ public:
     GameLoopInterface(container, renderer, mouse_handler), renderer(renderer), mouse_handler(mouse_handler)
     {};
 
-
     void update_hook() override;
     bool is_running() override;
     double get_dt() override;
