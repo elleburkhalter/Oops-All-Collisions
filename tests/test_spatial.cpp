@@ -93,6 +93,28 @@ TEST_CASE("Negative velocity test case", "[ball_to_ball][velocity]") {
     CHECK_THAT(colliderB.get_velocity().y, WithinAbs(-7.93, 0.01));
 }
 
+TEST_CASE("Ball changes velocity after colliding with bounding box", "[ball_to_bounding_box][velocity]") {
+    Ball ball({4.9, 5.0}, 1.0);  //Radius overlaps left wall
+    BallCollider collider(ball);
+    collider.set_mass(1.0);
+    collider.set_velocity({-2.0, 1.1});  //Moving left
+
+    OopsBoundingBox box({5.0, 0.0}, {15.0, 10.0});  //Box starts at x = 5.0
+
+    // Check if ball is overlapping the left side of the box
+    OopsBoundingBox ballBox = collider.get_bounding_box();
+    bool overlapsLeft = ballBox.min.x < box.min.x && ballBox.max.x > box.min.x;
+
+    if (overlapsLeft) {
+        //Reverse x-velocity
+        Point vel = collider.get_velocity();
+        collider.set_velocity({-vel.x, vel.y});
+    }
+
+    CHECK_THAT(collider.get_velocity().x, WithinAbs(2.0, 0.01));
+    CHECK_THAT(collider.get_velocity().y, WithinAbs(0.0, 0.01));
+}
+
 /*
 TEST_CASE("MultiLevelGrid returns correct collision pairs", "[MultiLevelGrid]") {
     MultiLevelGrid grid;
