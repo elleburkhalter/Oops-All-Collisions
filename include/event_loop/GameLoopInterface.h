@@ -10,7 +10,7 @@ public:
 
     virtual void update_collisions() = 0;
     virtual void update_entities(double dt) = 0;
-    virtual void render() const = 0;
+    virtual void render() = 0;
     virtual void instantiate_entities(size_t count) = 0;
 
     virtual void run() = 0;
