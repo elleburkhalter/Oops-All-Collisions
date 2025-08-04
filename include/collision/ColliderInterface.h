@@ -28,6 +28,7 @@ public:
 
     void set_mass(const double new_mass) { mass = new_mass;}
     void set_velocity(const Point new_velocity) { velocity = new_velocity;}
+    virtual void set_position(Point new_position) = 0;
 
     void update(double dt = 0.0);
 

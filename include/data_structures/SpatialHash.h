@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <list>
 #include <data_structures/ContainerInterface.h>
+#include <constants.h>
 
 class SpatialHash final : public ContainerInterface
 {
@@ -25,9 +26,9 @@ public:
     [[nodiscard]] iterator begin() const { return {cells.begin(), cells.end()}; }
     [[nodiscard]] iterator end() const { return {cells.end(), cells.end()}; }
 
-    static constexpr double TARGET_LOAD_FACTOR = 0.7;
-    static constexpr double AVERAGE_AGENT_OVERLAP = 1.5;
-    static constexpr double CELL_SIZE = 16.0;
+    static constexpr double TARGET_LOAD_FACTOR = SPATIAL_HASH_TARGET_LOAD_FACTOR;
+    static constexpr double AVERAGE_AGENT_OVERLAP = SPATIAL_HASH_AVERAGE_AGENT_OVERLAP;
+    static constexpr double CELL_SIZE = SPATIAL_HASH_CELL_SIZE;
 
     void draw_debug(RendererInterface& renderer) const override;
 

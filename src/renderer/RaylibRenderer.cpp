@@ -1,93 +1,105 @@
-//
-// Created by logan on 7/29/2025.
-//
 #include <renderer/RaylibRenderer.h>
-#include <renderer/RendererInterface.h>
-#include <unordered_map>
+#include <raylib.h>
+#include <renderer/ui_object/text/RaylibText.h>
 
-//Mapping from collision count to color
-std::unordered_map<int, Color> collisionColorMap = {
-    {0, DARKBLUE},
-    {1, BLUE},
-    {2, GREEN},
-    {3, YELLOW},
-    {4, ORANGE},
-    {5, RED},
-    {6, PINK},
-    {7, MAGENTA},
-};
-
-// Function to retrieve color based on collision count
-Color getBallColor(int collisionCount) {
-    if (collisionColorMap.find(collisionCount) != collisionColorMap.end()) {
-        return collisionColorMap[collisionCount];
-    }
-    return PURPLE; // Default color
-}
-//------------------------------------------------------------------------------------
-// Program main entry point
-//------------------------------------------------------------------------------------
-int RaylibRenderer::start()
+RaylibRenderer::RaylibRenderer()
 {
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    const int screenWidth = 2500;
-    const int screenHeight = 1500;
+    SetConfigFlags(FLAG_FULLSCREEN_MODE);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - keyboard input");
+    const int monitor = GetCurrentMonitor();
 
-    SetTargetFPS(60);    // Set our game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
-    bool onWelcomeScreen = true;
+    const int screen_width = GetMonitorHeight(monitor);
+    const int screen_height = GetMonitorWidth(monitor);
 
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        // Update
-        if (onWelcomeScreen) {
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                onWelcomeScreen = false;
-            }
-        }
-        //----------------------------------------------------------------------------------
-        else {
-            //inputs and logic during game loop go here
-            //instantiate entities here
-            AgentInterface neo();
-        }
-        //----------------------------------------------------------------------------------
-        // Draw
-        //----------------------------------------------------------------------------------
-        BeginDrawing();
+    view_area = OopsBoundingBox{-static_cast<double>(screen_width) / 2, -static_cast<double>(screen_height) / 2, static_cast<double>(screen_width) / 2, static_cast<double>(screen_height) / 2};
 
-        ClearBackground(BLACK);
-
-        if (onWelcomeScreen)
-        {
-            DrawText("Oops! All Collisions",(screenWidth - MeasureText("Oops! All Collisions", 120)) / 2,screenHeight / 2 - 250,120, BLUE);
-            DrawText("Created by Logan Dapp, Derrick Davison, and Elle Burkhalter",(screenWidth - MeasureText("Created by Logan Dapp, Derrick Davison, and Elle Burkhalter", 50)) / 2,screenHeight / 2 - 120, 50, GREEN);
-            DrawText("Click anywhere to begin...",(screenWidth - MeasureText("Click anywhere to begin...", 40)) / 2,screenHeight / 2 + 40,40, ORANGE);
-            //Border
-            //DrawRectangleLinesEx((Rectangle) {screenWidth / 2 - 1000,screenHeight / 2 - 500, 2000, 850 },6, SKYBLUE);
-            //Effects
-            DrawCircleGradient(screenWidth/4, screenHeight/2 + 200, 100, PINK, RED);
-            DrawCircleGradient(screenWidth/8, screenHeight/2 + 600, 350, YELLOW, ORANGE);
-            DrawCircleGradient(screenWidth - 350, screenHeight - 1200, 200, MAGENTA, DARKPURPLE);
-            DrawCircleGradient(screenWidth - 700, screenHeight - 200, 150, SKYBLUE, DARKBLUE);
-        } else {
-            //drawing during game loop goes here
-            
-            //DrawCircleV(ballPosition, 50, MAROON);
-        }
-
-        EndDrawing();
-        //----------------------------------------------------------------------------------
-    }
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
-
-    return 0;
+    InitWindow(screen_width, screen_height, "Collision Project");
+    SetTargetFPS(60);
 }
+
+
+RaylibRenderer::~RaylibRenderer()
+{
+    CloseWindow();
+}
+
+void RaylibRenderer::update_view_area()
+{
+    const double screen_aspect_ratio = get_screen_height() / get_screen_width();
+
+    if (const double view_area_aspect_ratio = view_area.get_height() / view_area.get_width(); screen_aspect_ratio != view_area_aspect_ratio)
+    {
+        // Window changed size, so update view_area height accordingly.
+        const double target_height = view_area.get_width() * screen_aspect_ratio;
+        const double current_height = view_area.get_height();
+        const double y_offset = 0.5 * (target_height - current_height);
+
+        view_area.min.y -= y_offset;
+        view_area.max.y += y_offset;
+    }
+}
+
+
+void RaylibRenderer::draw_box(const OopsBoundingBox& bounding_box)
+{
+    const auto screen_width = get_screen_height();
+    const auto screen_height = get_screen_width();
+
+    const Point draw_scale = {screen_width * bounding_box.get_width() / view_area.get_width(), screen_height * bounding_box.get_height() / view_area.get_height()};
+    const Point top_coord = screen_width * (bounding_box.min - view_area.min) / view_area.get_width();
+    const Point bottom_coord = top_coord + draw_scale;
+
+    DrawRectangleLines(static_cast<int>(top_coord.x), static_cast<int>(top_coord.y), static_cast<int>(bottom_coord.x), static_cast<int>(bottom_coord.y), GREEN);
+}
+
+void RaylibRenderer::draw_point(const Point point)
+{
+    const Point to_draw = get_screen_width() * (point - view_area.min) / view_area.get_width();;
+    DrawCircle(static_cast<int>(to_draw.x), static_cast<int>(to_draw.y), 1.0, RED);
+}
+
+void RaylibRenderer::draw_circle(const Ball ball)
+{
+    const double world_scale = get_screen_width() / view_area.get_width();
+    const Point center = (ball.center - view_area.min) * world_scale;
+    const double radius = ball.radius * world_scale;
+
+    DrawCircleLines(static_cast<int>(center.x), static_cast<int>(center.y), static_cast<float>(radius), YELLOW);
+}
+
+void RaylibRenderer::draw_text(const TextInterface& text)
+{
+    text.draw();
+}
+
+void RaylibRenderer::draw_entity(const EntityInterface& entity)
+{
+    entity.draw(*this);
+}
+void RaylibRenderer::draw_title_screen() const
+{
+    RaylibText title_text{"Oop! All Collisions", 120, {0, -250}};
+    title_text.set_alignment(TextAlignment::UC);
+    title_text.set_anchor(TextLocation::MC_RELATIVE);
+    title_text.draw(BLUE);
+
+    RaylibText author_text{"Created by Logan Dapp, Derrick Davison, and Elle Burkhalter", 40, {0, -120}};
+    author_text.set_alignment(TextAlignment::UC);
+    author_text.set_anchor(TextLocation::MC_RELATIVE);
+    author_text.draw(ORANGE);
+
+    RaylibText continue_text{"Click anywhere to begin...", 40, {0, 40}};
+    continue_text.set_alignment(TextAlignment::UC);
+    continue_text.set_anchor(TextLocation::MC_RELATIVE);
+    continue_text.draw(ORANGE);
+
+    const int screen_width = GetScreenWidth();
+    const int screen_height = GetScreenHeight();
+
+    DrawCircleGradient(screen_width/4, screen_height/2 + 200, 100, PINK, RED);
+    DrawCircleGradient(screen_width/8, screen_height/2 + 600, 350, YELLOW, ORANGE);
+    DrawCircleGradient(screen_width - 350, screen_height - 1200, 200, MAGENTA, DARKPURPLE);
+    DrawCircleGradient(screen_width - 700, screen_height - 200, 150, SKYBLUE, DARKBLUE);
+}
+
