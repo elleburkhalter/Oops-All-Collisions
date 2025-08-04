@@ -12,15 +12,15 @@ While the long-term vision could be a fully functional tower defense engine, the
 
 ## **What It Does**
 
-- Provides a **simulation core** for moving agents (enemies, projectiles) and static obstacles.
+- Provides a **simulation core** for moving agents (bouncing circles) that use physics.
 - Implements multiple spatial partitioning data structures:
   - Uniform Grid / Spatial Hash
   - Quadtree
   - Sweep and Prune (SAP)
   - BVH (Bounding Volume Hierarchy)
 - Tracks performance statistics (broad-phase checks, collisions, memory usage).
-- Supports **optional visualization** with SFML to show:
-  - Agents and projectiles
+- Supports **optional visualization** with Raylib to show:
+  - Agents
   - Partition boundaries (grid cells, quadtree nodes, etc.)
   - Debug information and live stats
 
@@ -38,8 +38,8 @@ While the long-term vision could be a fully functional tower defense engine, the
 This project uses **CMake (>=3.15)** and supports several configuration options:
 
 ### **Build Options**
-- `WITH_SFML` (**ON/OFF**, default ON)  
-  - Enables or disables SFML-based visualization.  
+- `WITH_Raylib` (**ON/OFF**, default ON)  
+  - Enables or disables Raylib-based visualization.  
   - If `OFF`, the project builds a headless simulation-only mode (no graphics).
 - `WITH_TESTS` (**ON/OFF**, default ON)  
   - Enables building unit tests (Catch2).
@@ -51,7 +51,7 @@ git clone https://github.com/elleburkhalter/Oops-All-Collisions.git
 cd tower_defense_collision
 
 # Configure and build (with visualization and tests)
-cmake -B build -DWITH_SFML=ON -DWITH_TESTS=ON
+cmake -B build -DWITH_Raylib=ON -DWITH_TESTS=ON
 cmake --build build
 ```
 
@@ -60,7 +60,7 @@ cmake --build build
   ```bash
   ./build/tower_defense [--visualize 1|0]
   ```
-  - `--visualize=1`: Show SFML visualization (if built with SFML).  
+  - `--visualize=1`: Show Raylib visualization (if built with Raylib).  
   - `--visualize=0`: Run headless.
 
 - **Tests:**
@@ -78,7 +78,7 @@ cmake --build build
 - CMake >= 3.15
 
 ### **Optional (for visualization)**
-- [SFML 3.0.1](https://github.com/SFML/SFML) (automatically fetched via CMake’s `FetchContent` if `WITH_SFML=ON`)
+- [Raylib 5.5](https://github.com/raysan5/raylib) (automatically fetched via CMake’s `FetchContent` if `WITH_Raylib=ON`)
 
 ### **Testing**
 - [Catch2 v3](https://github.com/catchorg/Catch2) (automatically fetched)
@@ -91,9 +91,25 @@ cmake --build build
 tower_defense_collision/
 ├── app/           # Main executable(s)
 ├── include/        # Public headers
-│   └── rendering/  # Renderer interface + implementations
+|   ├── collision/ # the collision code for our agents
+|   ├── data_structures/ # are data structures we implemented for managing many collisions 
+|   ├── event_loop/ # where the simulation is ran and updated
+|   ├── game_object/ # Where are agent classes are defined
+|   ├── mouse_handler/ # Mouse handler code for raylib
+|   ├── random/ # random number generator
+│   ├── renderer/  # Renderer interface + implementations
+|   ├── spatial/ # position and grid information
+│   └── statistics/  # Used for keeping track of collision stats and overall performance, currently unused
+├── graphics/ # graphical bitmaps no longer used
 ├── src/            # Library sources
-│   └── (WIP)
+│   ├── collision/ # the collision code for our agents
+|   ├── data_structures/ # are data structures we implemented for managing many collisions 
+|   ├── event_loop/ # where the simulation is ran and updated
+|   ├── game_object/ # Where are agent classes are defined
+|   ├── mouse_handler/ # Mouse handler code for raylib
+│   ├── renderer/  # Renderer interface + implementations
+|   ├── spatial/ # position and grid information
+│   └── statistics/  # Used for keeping track of collision stats and overall performance, also unused
 ├── tests/          # Unit tests
 └── CMakeLists.txt
 ```
