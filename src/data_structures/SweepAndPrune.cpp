@@ -6,7 +6,6 @@
 #include <unordered_set>
 #include <data_structures/SweepAndPrune.h>
 #include <algorithm>
-#include <iostream>
 
 void SweepAndPrune::reserve_slots(const size_t n)
 {

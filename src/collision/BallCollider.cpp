@@ -1,7 +1,6 @@
 #include <cmath>
 #include <collision/BallCollider.h>
 #include <constants.h>
-#include <iostream>
 
 CollisionCode BallCollider::resolve_collision_with(ColliderInterface& other)
 {

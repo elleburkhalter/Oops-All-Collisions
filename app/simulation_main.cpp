@@ -9,7 +9,7 @@
 #include <data_structures/SweepAndPrune.h>
 
 int main(){
-    MultiLevelGrid data_structure{};
+    SpatialHash data_structure{};
     RaylibRenderer raylib_renderer{};
     RaylibMouseHandler raylib_mouse_handler{};
     RaylibGameLoop raylib_game_loop{data_structure, raylib_renderer, raylib_mouse_handler};

@@ -1,4 +1,3 @@
-#include <iostream>
 #include <range/v3/view/subrange.hpp>
 #include <data_structures/NaiveLinear.h>
 

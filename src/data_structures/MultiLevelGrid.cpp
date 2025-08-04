@@ -1,10 +1,5 @@
-#include <iostream>
-#include <__msvc_ostream.hpp>
 #include <range/v3/view/subrange.hpp>
 #include <data_structures/MultiLevelGrid.h>
-
-// TODO: MLG Implementation
-
 
 void MultiLevelGrid::MLGNode::split_node()
 {
