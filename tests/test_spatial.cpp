@@ -388,3 +388,25 @@ TEST_CASE("SweepAndPrune updates entity locations correctly", "[SweepAndPrune]")
     auto collisions = sap.get_all_collisions();
     CHECK(collisions.empty());
 }
+
+TEST_CASE("SweepAndPrune get_all_entities returns correct pointers", "[SweepAndPrune]") {
+    SweepAndPrune sap;
+
+    BallCollider collider1(Ball({12.7, 8.0}, 1.3));
+    Entity entity1(collider1, {12.7, 8.0}, {0, 0});
+
+    BallCollider collider2(Ball({24.0, 16.1}, 2.2));
+    Entity entity2(collider2, {24.0, 16.1}, {-1, 1});
+
+    sap.add_collider(entity1);
+    sap.add_collider(entity2);
+
+    std::unordered_set<EntityInterface*> unique_entities;
+    for (EntityInterface* e : sap.get_all_entities()) {
+        unique_entities.insert(e);
+    }
+
+    CHECK(unique_entities.size() == 2);
+    CHECK(unique_entities.contains(&entity1));
+    CHECK(unique_entities.contains(&entity2));
+}
