@@ -68,6 +68,28 @@ TEST_CASE("Collision updates velocities correctly", "[ball_to_ball][velocity]") 
     CHECK_THAT(colliderB.get_velocity().y, WithinAbs(4.01, 0.01));
 }
 
+TEST_CASE("Negative velocity test case", "[ball_to_ball][velocity]") {
+    Ball ballA({32.2, 90.9}, 57.5);
+    Ball ballB({43.5, 100.1}, 10.0);
+
+    BallCollider colliderA(ballA);
+    BallCollider colliderB(ballB);
+
+    colliderA.set_mass(13.6);
+    colliderB.set_mass(6.6);
+
+    colliderA.set_velocity({-3.3, -4.6});
+    colliderB.set_velocity({2.1, 5.0});
+
+    CollisionCode code = colliderA.resolve_collision_with(colliderB);
+    CHECK(code == CollisionCode::COLLISION_PRESENT);
+
+    CHECK_THAT(colliderA.get_velocity().x, WithinAbs(0.23, 0.01));
+    CHECK_THAT(colliderB.get_velocity().x, WithinAbs(-5.17, 0.01));
+    CHECK_THAT(colliderA.get_velocity().y, WithinAbs(1.67, 0.01));
+    CHECK_THAT(colliderB.get_velocity().y, WithinAbs(-7.93, 0.01));
+}
+
 TEST_CASE("MultiLevelGrid returns correct collision pairs", "[MultiLevelGrid]") {
     MultiLevelGrid grid;
 
