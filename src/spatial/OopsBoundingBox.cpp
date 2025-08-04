@@ -38,6 +38,6 @@ Point OopsBoundingBox::get_ur() const
 }
 void OopsBoundingBox::draw_debug(RendererInterface& renderer) const
 {
-    renderer.draw_bounding_box(*this);
+    renderer.draw_box(*this);
 }
 

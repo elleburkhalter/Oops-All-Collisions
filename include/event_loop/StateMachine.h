@@ -16,4 +16,16 @@ private:
     std::stack<int> game_states{};
 };
 
+template <typename T>
+T StateMachine::get_state() const
+{
+    return static_cast<T>(this->game_states.top());
+}
+
+template <typename T>
+void StateMachine::transition_state(const T& state)
+{
+    this->game_states.push(static_cast<int>(state));
+}
+
 #endif //STATEMACHINE_H

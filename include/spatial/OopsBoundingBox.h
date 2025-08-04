@@ -5,6 +5,8 @@
 #include <spatial/RegionInterface.h>
 #include <renderer/draw/DebugDrawableInterface.h>
 
+class DebugDrawableInterface;
+
 struct OopsBoundingBox final : RegionInterface, DebugDrawableInterface
 {
     OopsBoundingBox() = default;

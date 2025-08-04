@@ -49,7 +49,7 @@ add_library(oops_core
         src/event_loop/StateMachine.cpp
         src/event_loop/GameLoopInterface.cpp
         src/game_object/enemies/BasicEnemy.cpp
-        include/mouse_handler/NullMouseHandler.h
+        src/mouse_handler/MouseHandlerInterface.cpp
 )
 target_include_directories(oops_core PUBLIC include ${range-v3_SOURCE_DIR}/include)
 target_link_libraries(oops_core PUBLIC range-v3)

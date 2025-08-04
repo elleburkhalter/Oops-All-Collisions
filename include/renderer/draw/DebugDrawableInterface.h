@@ -3,6 +3,8 @@
 
 #include <renderer/RendererInterface.h>
 
+class RendererInterface;
+
 class DebugDrawableInterface
 {
 public:

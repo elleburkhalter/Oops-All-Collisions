@@ -29,7 +29,7 @@ void GameLoopInterface::render_game()
     container.draw_debug(renderer);
     for (const auto entity : container.get_all_entities())
     {
-        renderer.draw_entity(entity);
+        renderer.draw_entity(*entity);
     }
 }
 

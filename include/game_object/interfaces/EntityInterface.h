@@ -5,7 +5,6 @@
 #include <memory>
 #include <game_object/interfaces/EntityFlags.h>
 #include <collision/ColliderInterface.h>
-#include <renderer/RendererInterface.h>
 #include <spatial/Point.h>
 
 class RendererInterface;

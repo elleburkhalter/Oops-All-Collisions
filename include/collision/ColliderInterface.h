@@ -1,10 +1,10 @@
 #ifndef COLLIDERINTERFACE_H
 #define COLLIDERINTERFACE_H
 
+#include <renderer/draw/DebugDrawableInterface.h>
 #include <spatial/Point.h>
 #include <spatial/OopsBoundingBox.h>
 #include <collision/ColliderFlags.h>
-#include <renderer/draw/DebugDrawableInterface.h>
 
 class BallCollider;
 

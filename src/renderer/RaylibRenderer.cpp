@@ -2,6 +2,8 @@
 #include <raylib.h>
 #include <cmath>
 #include <renderer/ui_object/text/RaylibText.h>
+#include <spatial/Ball.h>
+#include <game_object/interfaces/EntityInterface.h>
 
 RaylibRenderer::RaylibRenderer()
 {

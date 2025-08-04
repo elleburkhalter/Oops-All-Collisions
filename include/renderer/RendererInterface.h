@@ -2,17 +2,16 @@
 #ifndef RENDERERINTERFACE_H
 #define RENDERERINTERFACE_H
 
-#include <spatial/OopsBoundingBox.h>
-#include <spatial/Ball.h>
-#include <game_object/interfaces/AgentInterface.h>
-#include <game_object/interfaces/ProjectileInterface.h>
-#include <renderer/ui_object/text/TextInterface.h>
-
 // This will be the abstract base class responsible for providing
 // an interface for a visualization renderer (i.e. see the program
 // with Raylib or use a NullRenderer to turn it off).
 
+struct Point;
+struct Ball;
 struct OopsBoundingBox;
+class ProjectileInterface;
+class TextInterface;
+class EntityInterface;
 
 class RendererInterface
 {
