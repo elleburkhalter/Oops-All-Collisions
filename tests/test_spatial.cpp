@@ -203,3 +203,24 @@ TEST_CASE("NaiveLinear adds and counts entities correctly", "[NaiveLinear]") {
 
     CHECK(grid.get_entity_count() == 2);
 }
+
+TEST_CASE("NaiveLinear detects collisions correctly", "[NaiveLinear]") {
+    NaiveLinear grid;
+
+    BallCollider colliderA(Ball({9.9, 9.8}, 5.4));
+    Entity entityA(colliderA, {9.9, 9.8}, {-1.7, 7.0});
+
+    BallCollider colliderB(Ball({9.0, 7.8}, 2.0)); //Collides with A
+    Entity entityB(colliderB, {9.0, 7.8}, {9.0, 4.5});
+
+    BallCollider colliderC(Ball({87.0, 86.7}, 2.0)); //No collision
+    Entity entityC(colliderC, {87.0, 86.7}, {-9.0, 2.3});
+
+    grid.add_collider(entityA);
+    grid.add_collider(entityB);
+    grid.add_collider(entityC);
+
+    auto collisions = grid.get_collisions(entityA);
+    REQUIRE(collisions.size() == 1);
+    CHECK(collisions[0] == &entityB);
+}
