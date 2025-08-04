@@ -38,9 +38,6 @@ void NaiveLinear::draw_debug(RendererInterface& renderer) const
     for (const EntityInterface* entity : this->get_all_entities())
     {
         entity->draw(renderer);
-        // const OopsBoundingBox bbox = entity->get_collider().get_bounding_box();
-
-        // std::cout << "x: [" << bbox.min.x << ", " << bbox.max.x << "]; y: [" << bbox.min.x << ", " << bbox.max.x << "]" << std::endl;
     }
 }
 

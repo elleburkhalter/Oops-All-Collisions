@@ -18,7 +18,8 @@ RaylibRenderer::RaylibRenderer()
 
     InitWindow(screen_width, screen_height, "Collision Project");
 
-    view_area = OopsBoundingBox{-static_cast<double>(get_screen_width()) / 2, -static_cast<double>(get_screen_height()) / 2, static_cast<double>(get_screen_width()) / 2, static_cast<double>(get_screen_height()) / 2};
+    const double aspect_ratio = get_screen_height() / get_screen_width();
+    view_area = OopsBoundingBox{-X_START_WIDTH / 2, - aspect_ratio * X_START_WIDTH / 2, X_START_WIDTH / 2, aspect_ratio * X_START_WIDTH / 2};
 
     SetTargetFPS(60);
 }
@@ -36,8 +37,6 @@ void RaylibRenderer::before_draw()
 
 void RaylibRenderer::after_draw()
 {
-    std::cout << "MIN: " << view_area.min.x << ", " << view_area.min.y << std::endl;
-    std::cout << "MAX: " << view_area.max.x << ", " << view_area.max.y << std::endl;
     EndDrawing();
 }
 
@@ -74,10 +73,11 @@ void RaylibRenderer::move_view_area(double x, double y)
 
     const double view_area_conversion = view_area.get_width() / get_screen_width();
 
-    const double dx = (x - last_point->x) * view_area_conversion;
-    const double dy = (y - last_point->y) * view_area_conversion;
+    const double dx = (last_point->x-x) * view_area_conversion;
+    const double dy = (last_point->y-y) * view_area_conversion;
 
     view_area = {view_area.min.x + dx, view_area.min.y + dy, view_area.max.x + dx, view_area.max.y + dy};
+    last_point = {x, y};
 }
 
 
