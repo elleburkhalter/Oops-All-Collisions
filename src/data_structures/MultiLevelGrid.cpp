@@ -364,7 +364,7 @@ void MultiLevelGrid::update_structure()
         // else leave in place
     }
 
-    // 3) Collapse any parents whose children became empty (after all erasures).
+    // Collapse any parents whose children became empty (after all erasures).
     for (auto& wparent : maybe_collapse)
     {
         if (auto parent = wparent.lock(); parent && parent->can_delete_children())
