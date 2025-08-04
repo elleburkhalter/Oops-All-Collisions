@@ -326,3 +326,20 @@ TEST_CASE("SpatialHash get_all_entities returns correct set", "[SpatialHash]") {
     CHECK((collected[0] == &entityA || collected[1] == &entityA));
     CHECK((collected[0] == &entityB || collected[1] == &entityB));
 }
+
+TEST_CASE("SweepAndPrune adds and counts distinct entities", "[SweepAndPrune]") {
+    SweepAndPrune sap;
+
+    BallCollider collider1(Ball({15.5, 20.4}, 2.5));
+    Entity entity1(collider1, {15.5, 20.4}, {-4.5, 5.6});
+
+    BallCollider collider2(Ball({45.1, 80.0}, 3.1));
+    Entity entity2(collider2, {45.1, 80.0}, {-2.2, 7.3});
+
+    sap.reserve_slots(2);
+    sap.add_collider(entity1);
+    sap.add_collider(entity2);
+
+    CHECK(sap.get_entity_count() == 2);
+    CHECK(sap.get_all_entities().size() == 4); //Each entity = 2 SAPLocations
+}
