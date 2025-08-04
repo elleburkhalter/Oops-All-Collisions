@@ -286,3 +286,21 @@ TEST_CASE("SpatialHash detects collisions in nearby cells", "[SpatialHash]") {
     REQUIRE(collisions.size() == 1);
     CHECK(collisions[0] == &entityB);
 }
+
+TEST_CASE("SpatialHash updates structure correctly on movement", "[SpatialHash]") {
+    SpatialHash hash;
+
+    BallCollider collider(Ball({22.2, 15.0}, 1.0));
+    Entity entity(collider, {22.2, 15.0}, {0, 0});
+    hash.add_collider(entity);
+
+    CHECK(hash.get_collisions(entity).empty());
+
+    //Move the entity to a new cell
+    entity.set_position({101, 122});
+    hash.update_structure();
+
+    //Should still have zero collisions
+    auto collisions = hash.get_collisions(entity);
+    CHECK(collisions.empty());
+}
