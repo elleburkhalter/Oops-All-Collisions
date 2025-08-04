@@ -341,5 +341,33 @@ TEST_CASE("SweepAndPrune adds and counts distinct entities", "[SweepAndPrune]") 
     sap.add_collider(entity2);
 
     CHECK(sap.get_entity_count() == 2);
-    CHECK(sap.get_all_entities().size() == 4); //Each entity = 2 SAPLocations
+    size_t count = 0;
+    for (auto* entity : sap.get_all_entities()) {
+        ++count;
+    }
+    CHECK(count == 4); //Each entity = 2 SAP locations
+}
+
+TEST_CASE("SweepAndPrune detects intended collision", "[SweepAndPrune]") {
+    SweepAndPrune sap;
+
+    BallCollider colliderA(Ball({10.2, 5.8}, 4.0));
+    Entity entityA(colliderA, {10.2, 5.8}, {7.0, -1.0});
+
+    BallCollider colliderB(Ball({13.2, 6.1}, 3.0)); //Collides with A
+    Entity entityB(colliderB, {13.2, 6.1}, {0, 0});
+
+    BallCollider colliderC(Ball({55.0, 107.0}, 5.9)); //No collision
+    Entity entityC(colliderC, {55.0, 107.0}, {-1.2, 2.1});
+
+    sap.add_collider(entityA);
+    sap.add_collider(entityB);
+    sap.add_collider(entityC);
+    sap.post_bulk_add_callback();
+
+    auto collisions = sap.get_all_collisions();
+    REQUIRE(collisions.size() == 1);
+
+    auto [e1, e2] = collisions.front();
+    CHECK((e1 == &entityA && e2 == &entityB) || (e1 == &entityB && e2 == &entityA));
 }
