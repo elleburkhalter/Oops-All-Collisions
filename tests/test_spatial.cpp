@@ -93,7 +93,7 @@ TEST_CASE("Negative velocity test case", "[ball_to_ball][velocity]") {
     CHECK_THAT(colliderB.get_velocity().y, WithinAbs(-7.93, 0.01));
 }
 
-TEST_CASE("Ball changes velocity after colliding with bounding box", "[ball_to_bounding_box][velocity]") {
+TEST_CASE("Ball changes X velocity after colliding with bounding box", "[ball_to_bounding_box][velocity]") {
     Ball ball({4.9, 5.0}, 1.0);  //Radius overlaps left wall
     BallCollider collider(ball);
     collider.set_mass(1.0);
@@ -113,6 +113,28 @@ TEST_CASE("Ball changes velocity after colliding with bounding box", "[ball_to_b
 
     CHECK_THAT(collider.get_velocity().x, WithinAbs(2.0, 0.01));
     CHECK_THAT(collider.get_velocity().y, WithinAbs(0.0, 0.01));
+}
+
+TEST_CASE("Ball changes Y velocity after colliding with bounding box", "[ball_to_bounding_box][velocity]") {
+    Ball ball({10.0, 6.9}, 1.0);
+    BallCollider collider(ball);
+    collider.set_mass(1.0);
+    collider.set_velocity({0.0, -4.0});
+
+    OopsBoundingBox box({5.0, 7.0}, {15.0, 20.0});
+
+    OopsBoundingBox ballBox = collider.get_bounding_box();
+
+    //Check if the ball overlaps the wall
+    bool overlapsTop = ballBox.min.y < box.min.y && ballBox.max.y > box.min.y;
+
+    if (overlapsTop) {
+        Point vel = collider.get_velocity();
+        collider.set_velocity({vel.x, -vel.y});
+    }
+
+    CHECK_THAT(collider.get_velocity().x, WithinAbs(0.0, 0.01));
+    CHECK_THAT(collider.get_velocity().y, WithinAbs(4.0, 0.01));
 }
 
 /*
