@@ -224,3 +224,26 @@ TEST_CASE("NaiveLinear detects collisions correctly", "[NaiveLinear]") {
     REQUIRE(collisions.size() == 1);
     CHECK(collisions[0] == &entityB);
 }
+
+TEST_CASE("NaiveLinear returns correct all_entities view", "[NaiveLinear]") {
+    NaiveLinear grid;
+
+    BallCollider colliderA(Ball({33, 71}, 1.3));
+    Entity entityA(colliderA, {33, 71}, {-0.9, -10});
+
+    BallCollider colliderB(Ball({2, 2}, 1.4));
+    Entity entityB(colliderB, {2, 2}, {21.3, 3.0});
+
+    grid.add_collider(entityA);
+    grid.add_collider(entityB);
+
+    auto view = grid.get_all_entities();
+    std::vector<EntityInterface*> collected;
+    for (EntityInterface* e : view) {
+        collected.push_back(e);
+    }
+
+    REQUIRE(collected.size() == 2);
+    CHECK((collected[0] == &entityA || collected[1] == &entityA));
+    CHECK((collected[0] == &entityB || collected[1] == &entityB));
+}
