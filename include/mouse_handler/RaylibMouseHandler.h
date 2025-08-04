@@ -4,7 +4,12 @@
 
 class RaylibMouseHandler final : public MouseHandlerInterface
 {
-    void handle_click() override;
+    bool is_right_down() override;
+    bool is_left_down() override;
+    bool is_middle_down() override;
+
+    Point get_mouse_location() override;
+    double get_mouse_scroll() override;
 };
 
 #endif //RAYLIBMOUSEHANDLER_H

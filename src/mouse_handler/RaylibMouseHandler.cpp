@@ -1,12 +1,26 @@
 #include <raylib.h>
 #include <mouse_handler/RaylibMouseHandler.h>
 
-void RaylibMouseHandler::handle_click()
+Point RaylibMouseHandler::get_mouse_location()
 {
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) this->handle_left_click(GetMouseX(), GetMouseY());
-    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) this->handle_right_click(GetMouseX(), GetMouseY());
-    if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) this->handle_middle_click(GetMouseX(), GetMouseY());
-
-    if (Is)
+    const double x = GetMouseX();
+    const double y = GetMouseY();
+    return {x, y};
+}
+double RaylibMouseHandler::get_mouse_scroll()
+{
+    return static_cast<double>(GetMouseWheelMove());
+}
+bool RaylibMouseHandler::is_left_down()
+{
+    return IsMouseButtonDown(MOUSE_BUTTON_LEFT);
+}
+bool RaylibMouseHandler::is_middle_down()
+{
+    return IsMouseButtonDown(MOUSE_BUTTON_MIDDLE);
+}
+bool RaylibMouseHandler::is_right_down()
+{
+    return IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
 }
 
