@@ -1,14 +1,14 @@
 #include <random/NormalDistribution.h>
-#include <event_loop/GameLoop.h>
+#include <event_loop/GameLoopInterface.h>
 #include <game_object/enemies/BasicEnemy.h>
 #include <event_loop/GameState.h>
 
-void GameLoop::instantiate_entities(const size_t count)
+void GameLoopInterface::instantiate_entities(const size_t count)
 {
     for (size_t i = 0; i < count; i++) container.add_basic_enemy();
 }
 
-void GameLoop::update_collisions()
+void GameLoopInterface::update_collisions()
 {
     for (const auto& [fst, snd] : container.get_all_collisions())
     {
@@ -16,7 +16,7 @@ void GameLoop::update_collisions()
     }
 }
 
-void GameLoop::update_entities(const double dt)
+void GameLoopInterface::update_entities(const double dt)
 {
     for (const auto entity : container.get_all_entities())
     {
@@ -24,7 +24,7 @@ void GameLoop::update_entities(const double dt)
     }
 }
 
-void GameLoop::render_game()
+void GameLoopInterface::render_game()
 {
     container.draw_debug(renderer);
     for (const auto entity : container.get_all_entities())
@@ -33,13 +33,13 @@ void GameLoop::render_game()
     }
 }
 
-void GameLoop::render_title_screen()
+void GameLoopInterface::render_title_screen()
 {
     renderer.draw_title_screen();
 }
 
 
-void GameLoop::render()
+void GameLoopInterface::render()
 {
     if (state_machine.get_state<GameState>() == GameState::TITLE_SCREEN_STATE)
     {

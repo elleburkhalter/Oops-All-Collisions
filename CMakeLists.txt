@@ -47,7 +47,7 @@ add_library(oops_core
         src/renderer/NullRenderer.cpp
         include/renderer/ui_object/text/NullText.h
         src/event_loop/StateMachine.cpp
-        src/event_loop/GameLoop.cpp
+        src/event_loop/GameLoopInterface.cpp
         src/game_object/enemies/BasicEnemy.cpp
         include/mouse_handler/NullMouseHandler.h
 )
@@ -68,6 +68,7 @@ if (WITH_RAYLIB)
             src/renderer/RaylibRenderer.cpp
             src/renderer/ui_object/text/RaylibText.cpp
             src/mouse_handler/RaylibMouseHandler.cpp
+            src/event_loop/RaylibGameLoop.cpp
     )
     target_include_directories(oops_rendering PUBLIC include ${range-v3_SOURCE_DIR}/include)
     target_link_libraries(oops_rendering PUBLIC oops_core raylib range-v3)
