@@ -2,6 +2,29 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+// ========== FOR DATA STRUCTURE ========
+
+// ----- For collision-record pre-allocation in ContainerInterface.h -----
+#define COLLISION_RECORD_TARGET_LOAD_FACTOR 0.7
+#define ESTIMATED_AVERAGE_COLLISIONS_PER_ENTITY 2.0
+
+// ----- For MultiLevelGrid.h -----
+#define CELL_COUNT_SPLIT_THRESHOLD 10;
+#define MULTILEVELGRID_INITIAL_X_START -128.0;
+#define MULTILEVELGRID_INITIAL_X_END 128.0;
+#define MULTILEVELGRID_INITIAL_Y_START -128.0;
+#define MULTILEVELGRID_INITIAL_Y_END 128.0;
+
+// ----- For SpatialHash.h -----
+#define SPATIAL_HASH_TARGET_LOAD_FACTOR 0.7
+#define SPATIAL_HASH_AVERAGE_AGENT_OVERLAP 1.5
+#define SPATIAL_HASH_CELL_SIZE 16.0
+
+// ========== FOR COLLISIONS ==========
+#define PERCENT_POSITION_CORRECTION_PER_FRAME 0.2;
+#define ALLOWABLE_PENETRATION_SLOP 0.01;
+
+// For simulation
 #define N_ENTITIES 100
 
 #endif //CONSTANTS_H

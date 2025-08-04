@@ -6,6 +6,7 @@
 #include <utility>
 #include <stack>
 #include <list>
+#include <constants.h>
 
 class MultiLevelGrid final : public ContainerInterface
 {
@@ -43,7 +44,7 @@ class MLGNode final : public DebugDrawableInterface, std::enable_shared_from_thi
 
         void draw_debug(RendererInterface& renderer) const override;
 
-        static constexpr size_t SPLIT_SIZE = 10;
+        static constexpr size_t SPLIT_SIZE = CELL_COUNT_SPLIT_THRESHOLD;
     private:
 
         std::shared_ptr<MLGNode> raise_root(bool expand_left, bool expand_up);;
@@ -168,10 +169,10 @@ public:
     MLGNode::iterator begin() const;
     MLGNode::iterator end() const;
 
-    static constexpr double X_START_MIN = -128.0;
-    static constexpr double X_START_MAX = 128.0;
-    static constexpr double Y_START_MIN = -128.0;
-    static constexpr double Y_START_MAX = 128.0;
+    static constexpr double X_START_MIN = MULTILEVELGRID_INITIAL_X_START;
+    static constexpr double X_START_MAX = MULTILEVELGRID_INITIAL_X_END;
+    static constexpr double Y_START_MIN = MULTILEVELGRID_INITIAL_Y_START;
+    static constexpr double Y_START_MAX = MULTILEVELGRID_INITIAL_Y_END;
 
     size_t entity_count = 0;
 

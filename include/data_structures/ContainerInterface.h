@@ -9,6 +9,7 @@
 
 #include <game_object/enemies/BasicEnemy.h>
 #include <random/NormalDistribution.h>
+#include <constants.h>
 
 class ContainerInterface : public DebugDrawableInterface
 {
@@ -29,8 +30,8 @@ public:
     virtual void update_structure() = 0;  // should be called after moving entities and changing positions/bounding boxes
 
     // For default implementation of get_all_collisions();
-    static constexpr double TARGET_LOAD_FACTOR = 0.7;
-    static constexpr double AVERAGE_COLLISIONS_PER_ENTITY = 2.0;
+    static constexpr double TARGET_LOAD_FACTOR = COLLISION_RECORD_TARGET_LOAD_FACTOR;
+    static constexpr double AVERAGE_COLLISIONS_PER_ENTITY = ESTIMATED_AVERAGE_COLLISIONS_PER_ENTITY;
 
 private:
     std::list<std::unique_ptr<EntityInterface>> entities;

@@ -1,5 +1,6 @@
 #include <cmath>
 #include <collision/BallCollider.h>
+#include <constants.h>
 
 CollisionCode BallCollider::resolve_collision_with(ColliderInterface& other)
 {
@@ -46,8 +47,8 @@ Point BallCollider::compute_position_correction_with_ball(const BallCollider& ot
         const double inv_mass_a = (this->mass == 0) ? 0 : 1.0 / this->mass;
         const double inv_mass_b = (other.mass == 0) ? 0 : 1.0 / other.mass;
 
-        constexpr double percent = 0.2;
-        constexpr double slop = 0.01;
+        constexpr double percent = PERCENT_POSITION_CORRECTION_PER_FRAME;
+        constexpr double slop = ALLOWABLE_PENETRATION_SLOP;
 
         const double correction_mag = std::max(penetration - slop, 0.0) / (inv_mass_a + inv_mass_b) * percent;
         Point normal{1.0, 0};
