@@ -265,3 +265,24 @@ TEST_CASE("SpatialHash adds entities and counts correctly", "[SpatialHash]") {
 
     CHECK(hash.get_entity_count() == 2);
 }
+
+TEST_CASE("SpatialHash detects collisions in nearby cells", "[SpatialHash]") {
+    SpatialHash hash;
+
+    BallCollider colliderA(Ball({16.7, 15.0}, 2.5));
+    Entity entityA(colliderA, {16.7, 15.0}, {2.0, 2.0});
+
+    BallCollider colliderB(Ball({17.0, 15.1}, 2.0)); //Collides with A
+    Entity entityB(colliderB, {17.0, 15.1}, {-2.0, 2.2});
+
+    BallCollider colliderC(Ball({10, 10}, 1.0)); //No collision
+    Entity entityC(colliderC, {10, 10}, {0, 0});
+
+    hash.add_collider(entityA);
+    hash.add_collider(entityB);
+    hash.add_collider(entityC);
+
+    auto collisions = hash.get_collisions(entityA);
+    REQUIRE(collisions.size() == 1);
+    CHECK(collisions[0] == &entityB);
+}
