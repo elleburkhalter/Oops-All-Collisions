@@ -38,7 +38,6 @@ void GameLoopInterface::render_title_screen()
     renderer.draw_title_screen();
 }
 
-
 void GameLoopInterface::render()
 {
     if (state_machine.get_state<GameState>() == GameState::TITLE_SCREEN_STATE)
@@ -50,3 +49,18 @@ void GameLoopInterface::render()
         this->render_game();
     }
 }
+
+void GameLoopInterface::run()
+{
+    while (should_run())
+    {
+        if (get_state() == GameState::ACTIVE_GAME_STATE)
+        {
+            this->update_collisions();
+            const double dt = get_dt();
+            this->update_entities(dt);
+        }
+        this->render();
+    }
+}
+
