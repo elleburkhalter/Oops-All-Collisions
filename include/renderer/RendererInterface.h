@@ -28,6 +28,8 @@ public:
     virtual void draw_point(Point point) = 0;
     virtual void draw_circle(Ball ball) = 0;
     virtual void draw_text(const TextInterface& text) = 0;
+
+    virtual void draw_title_screen() const = 0;
 };
 
 #endif //RENDERERINTERFACE_H

@@ -50,7 +50,7 @@ void RaylibRenderer::draw_box(const OopsBoundingBox& bounding_box)
     const Point top_coord = screen_width * (bounding_box.min - view_area.min) / view_area.get_width();
     const Point bottom_coord = top_coord + draw_scale;
 
-    DrawRectangle(static_cast<int>(top_coord.x), static_cast<int>(top_coord.y), static_cast<int>(bottom_coord.x), static_cast<int>(bottom_coord.y), GREEN);
+    DrawRectangleLines(static_cast<int>(top_coord.x), static_cast<int>(top_coord.y), static_cast<int>(bottom_coord.x), static_cast<int>(bottom_coord.y), GREEN);
 }
 
 void RaylibRenderer::draw_point(const Point point)
@@ -77,5 +77,29 @@ void RaylibRenderer::draw_entity(const EntityInterface& entity)
 {
     entity.draw(*this);
 }
+void RaylibRenderer::draw_title_screen() const
+{
+    RaylibText title_text{"Oop! All Collisions", 120, {0, -250}};
+    title_text.set_alignment(TextAlignment::UC);
+    title_text.set_anchor(TextLocation::MC_RELATIVE);
+    title_text.draw(BLUE);
 
+    RaylibText author_text{"Created by Logan Dapp, Derrick Davison, and Elle Burkhalter", 40, {0, -120}};
+    author_text.set_alignment(TextAlignment::UC);
+    author_text.set_anchor(TextLocation::MC_RELATIVE);
+    author_text.draw(ORANGE);
+
+    RaylibText continue_text{"Click anywhere to begin...", 40, {0, 40}};
+    continue_text.set_alignment(TextAlignment::UC);
+    continue_text.set_anchor(TextLocation::MC_RELATIVE);
+    continue_text.draw(ORANGE);
+
+    const int screen_width = GetScreenWidth();
+    const int screen_height = GetScreenHeight();
+
+    DrawCircleGradient(screen_width/4, screen_height/2 + 200, 100, PINK, RED);
+    DrawCircleGradient(screen_width/8, screen_height/2 + 600, 350, YELLOW, ORANGE);
+    DrawCircleGradient(screen_width - 350, screen_height - 1200, 200, MAGENTA, DARKPURPLE);
+    DrawCircleGradient(screen_width - 700, screen_height - 200, 150, SKYBLUE, DARKBLUE);
+}
 

@@ -27,6 +27,7 @@ public:
 
     void update_view_area();
 
+    void draw_title_screen() const override;
 private:
     OopsBoundingBox view_area;
     StateMachine game_state{};
