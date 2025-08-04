@@ -371,3 +371,20 @@ TEST_CASE("SweepAndPrune detects intended collision", "[SweepAndPrune]") {
     auto [e1, e2] = collisions.front();
     CHECK((e1 == &entityA && e2 == &entityB) || (e1 == &entityB && e2 == &entityA));
 }
+
+TEST_CASE("SweepAndPrune updates entity locations correctly", "[SweepAndPrune]") {
+    SweepAndPrune sap;
+
+    BallCollider collider(Ball({26.6, 31.0}, 7.6));
+    Entity entity(collider, {26.6, 31.0}, {1.1, 1.8});
+    sap.add_collider(entity);
+    sap.post_bulk_add_callback();
+
+    //Move entity on X-axis
+    entity.set_position({90.0, 36.2});
+    sap.update_structure();
+
+    //Should not collide with old position
+    auto collisions = sap.get_all_collisions();
+    CHECK(collisions.empty());
+}
