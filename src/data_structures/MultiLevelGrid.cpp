@@ -1,3 +1,5 @@
+#include <iostream>
+#include <__msvc_ostream.hpp>
 #include <range/v3/view/subrange.hpp>
 #include <data_structures/MultiLevelGrid.h>
 
@@ -24,7 +26,7 @@ void MultiLevelGrid::MLGNode::split_node()
     bl_child->parent = shared_from_this();
     br_child->parent = shared_from_this();
 
-    std::list<EntityInterface*> new_entities{SPLIT_SIZE};
+    std::list<EntityInterface*> new_entities{};
     for (auto* entity : entities)
     {
         const bool success = ul_child->insert_recursive(*entity) ||
@@ -35,7 +37,9 @@ void MultiLevelGrid::MLGNode::split_node()
     }
     entities = std::move(new_entities);
 }
-std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(const bool expand_left, const bool expand_up)
+
+std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(
+    const bool expand_left, const bool expand_up)
 {
     if (!is_root()) throw std::runtime_error("Tried to raise non-root node.");
 
@@ -61,7 +65,10 @@ std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(con
         break;
     }
 
-    const OopsBoundingBox p_bbox = {{p_center.x - bounding_box.get_width(), p_center.y - bounding_box.get_height()}, {p_center.x + bounding_box.get_width(), p_center.y + bounding_box.get_height()}};
+    const OopsBoundingBox p_bbox = {
+        {p_center.x - bounding_box.get_width(), p_center.y - bounding_box.get_height()},
+        {p_center.x + bounding_box.get_width(), p_center.y + bounding_box.get_height()}
+    };
 
     const OopsBoundingBox ul_bbox{p_bbox.min.x, p_bbox.min.y, p_center.x, p_center.y};
     const OopsBoundingBox ur_bbox{p_center.x, p_bbox.min.y, p_bbox.max.x, p_center.y};
@@ -110,16 +117,16 @@ std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::raise_root(con
 
 std::weak_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::get_root()
 {
-    std::weak_ptr<MLGNode> root = shared_from_this();
+    std::weak_ptr<MLGNode> new_root = shared_from_this();
     while (true)
     {
-        if (const auto locked = root.lock())
+        if (const auto locked = new_root.lock())
         {
             if (locked->is_root()) break;
-            root = locked->get_parent();
+            new_root = locked->get_parent();
         }
     }
-    return root;
+    return new_root;
 }
 
 bool MultiLevelGrid::MLGNode::contains(const OopsBoundingBox& bbox) const
@@ -158,64 +165,74 @@ bool MultiLevelGrid::MLGNode::insert_recursive(EntityInterface& entity)
     entities.push_back(&entity);
     entity.set_tag<MLGNode>(shared_from_this());
     return true;
-
 }
 
-void MultiLevelGrid::MLGNode::insert(EntityInterface& entity)
+std::shared_ptr<MultiLevelGrid::MLGNode> MultiLevelGrid::MLGNode::insert(EntityInterface& entity)
 {
-    std::weak_ptr<MLGNode> root = get_root();
-    auto locked = root.lock();
-    if (!locked) return;
+    // std::weak_ptr<MLGNode> new_root = get_root();
+    // auto current = new_root.lock();
 
-    while (!locked->contains(entity.get_collider().get_bounding_box().min))
+    std::shared_ptr<MLGNode> current = shared_from_this();;
+    if (!current) return nullptr;
+
+    const OopsBoundingBox bbox = entity.get_collider().get_bounding_box();
+    while (!current->contains(bbox))
     {
-        root = raise_root(true, true);
-        locked = root.lock();
-        if (!locked) return;
+        const bool expand_left = bbox.min.x < current->bounding_box.min.x;
+        const bool expand_up = bbox.min.y < current->bounding_box.min.y;
+        const bool expand_right = bbox.max.x > current->bounding_box.max.x;
+        const bool expand_down = bbox.max.y > current->bounding_box.max.y;
+
+        if (expand_left || expand_up)
+        {
+            current = current->raise_root(expand_left, expand_up);
+        }
+        else
+        {
+            current = current->raise_root(!expand_right, !expand_down);
+        }
     }
-    while (!locked->contains(entity.get_collider().get_bounding_box().max))
-    {
-        root = raise_root(false, false);
-        locked = root.lock();
-        if (!locked) return;
-    }
-    locked->insert_recursive(entity);
+    current->insert_recursive(entity);
+    return current;
 }
 
 
 MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::begin() const
 {
-    return iterator(*this);
+    return iterator(shared_from_this()); // const overload yields shared_ptr<const MLGNode>
 }
+
 MultiLevelGrid::MLGNode::iterator MultiLevelGrid::MLGNode::end()
 {
-    return iterator();
+    return iterator(); // default-constructed -> at_end_ = true
 }
 
 MultiLevelGrid::MLGNode::iterator MultiLevelGrid::begin() const
 {
-    return root.begin();
+    return root->begin();
 }
+
 MultiLevelGrid::MLGNode::iterator MultiLevelGrid::end() const
 {
-    return root.end();
+    return root->end();
 }
+
 void MultiLevelGrid::add_collider(EntityInterface& other)
 {
     ++entity_count;
-    root.insert(other);
-    const auto new_root = root.get_root().lock();
-    root = *new_root;
+    if (const std::shared_ptr<MLGNode> potential_root = root->insert(other)) root = std::move(potential_root);
 }
+
 void MultiLevelGrid::reserve_slots(size_t n)
 {
-
 }
+
 ranges::any_view<EntityInterface*> MultiLevelGrid::get_all_entities() const
 {
     auto range = ranges::subrange(this->begin(), this->end());
     return ranges::any_view<EntityInterface*>{range};
 }
+
 std::list<EntityInterface*> MultiLevelGrid::MLGNode::coarse_collision_recursive(const OopsBoundingBox& bbox) const
 {
     std::list<EntityInterface*> collisions{};
@@ -232,11 +249,13 @@ std::list<EntityInterface*> MultiLevelGrid::MLGNode::coarse_collision_recursive(
 
 std::vector<EntityInterface*> MultiLevelGrid::get_collisions(const EntityInterface& other) const
 {
-    std::vector<EntityInterface*> collisions{6};
+    std::vector<EntityInterface*> collisions{};
+    collisions.reserve(6);
     const ColliderInterface& collider = other.get_collider();
     const OopsBoundingBox bbox = collider.get_bounding_box();
 
-    for (const std::list<EntityInterface*> candidates = this->root.coarse_collision_recursive(bbox); auto* candidate : candidates)
+    for (const std::list<EntityInterface*> candidates = this->root->coarse_collision_recursive(bbox); EntityInterface*
+         candidate : candidates)
     {
         if (other.get_collider().is_colliding_with(candidate->get_collider())) collisions.push_back(candidate);
     }
@@ -259,47 +278,99 @@ void MultiLevelGrid::MLGNode::delete_children()
 
 void MultiLevelGrid::update_structure()
 {
-    for (MLGNode::iterator it = begin(); it != end(); ++it)
+    std::vector<EntityInterface*> snapshot;
+    snapshot.reserve(entity_count);
     {
-        EntityInterface* entity = *it;
-        MLGNode container = *(entity->get_tag<MLGNode>());
-        // If container no longer contains entity; reinsert from root
-        if (!container.contains(entity->get_collider().get_bounding_box()))
+        std::stack<std::shared_ptr<MLGNode>> st;
+        st.push(root);
+        while (!st.empty())
         {
-            container.get_entities().erase(it.get_inner());
-            add_collider(*entity);
-            // If rebinding the entity makes the parent of the container able to delete its children; do so.
-            if (const auto parent = container.get_parent().lock(); parent && parent->can_delete_children())
+            const auto n = std::move(st.top());
+            st.pop();
+
+            for (EntityInterface* e : n->entities)
             {
-                parent->delete_children();
+                if (e) snapshot.push_back(e);
+            }
+
+            // DFS to children
+            if (!n->is_leaf())
+            {
+                if (n->ul_child) st.push(n->ul_child);
+                if (n->ur_child) st.push(n->ur_child);
+                if (n->bl_child) st.push(n->bl_child);
+                if (n->br_child) st.push(n->br_child);
+            }
+        }
+    }
+
+    // Parents to consider for collapsing after the moves.
+    std::vector<std::weak_ptr<MLGNode>> maybe_collapse;
+    maybe_collapse.reserve(snapshot.size());
+
+    auto erase_from_node = [&](const std::shared_ptr<MLGNode>& node, const EntityInterface* entity)
+    {
+        if (!node) return;
+        for (auto it = node->entities.begin(); it != node->entities.end(); ++it)
+        {
+            if (*it == entity)
+            {
+                node->entities.erase(it); // safe for std::list: only invalidates 'it'
+                if (const auto p = node->get_parent().lock())
+                {
+                    maybe_collapse.emplace_back(p);
+                }
+                return;
+            }
+        }
+    };
+
+    for (EntityInterface* entity : snapshot)
+    {
+        if (!entity) continue;
+
+        auto container = entity->get_tag<MLGNode>();
+        if (!container) continue; // entity might have been removed externally
+
+        const OopsBoundingBox& bbox = entity->get_collider().get_bounding_box();
+        if (!container->contains(bbox))
+        {
+            // Remove from old node
+            erase_from_node(container, entity);
+
+            // Reinsert (may raise root)
+            if (auto new_root = root->insert(*entity))
+            {
+                root = std::move(new_root);
             }
             continue;
         }
-        // If container has children, see if any children fully encapsulate
-        if (!container.is_leaf())
+
+        // Still inside container: try to push down to a child that fully contains it.
+        if (!container->is_leaf())
         {
-            if (const std::shared_ptr<MLGNode> child = container.get_ul_child(); child && child->insert_recursive(*entity))
+            bool moved = false;
+            if (auto c = container->get_ul_child(); c && c->insert_recursive(*entity)) moved = true;
+            else if (auto c = container->get_ur_child(); c && c->insert_recursive(*entity)) moved = true;
+            else if (auto c = container->get_bl_child(); c && c->insert_recursive(*entity)) moved = true;
+            else if (auto c = container->get_br_child(); c && c->insert_recursive(*entity)) moved = true;
+
+            if (moved)
             {
-                container.get_entities().erase(it.get_inner());
-                continue;
-            }
-            if (const std::shared_ptr<MLGNode> child = container.get_ur_child(); child && child->insert_recursive(*entity))
-            {
-                container.get_entities().erase(it.get_inner());
-                continue;
-            }
-            if (const std::shared_ptr<MLGNode> child = container.get_bl_child(); child && child->insert_recursive(*entity))
-            {
-                container.get_entities().erase(it.get_inner());
-                continue;
-            }
-            if (const std::shared_ptr<MLGNode> child = container.get_br_child(); child && child->insert_recursive(*entity))
-            {
-                container.get_entities().erase(it.get_inner());
-                continue;
+                // Remove from old node after successful child insertion
+                erase_from_node(container, entity);
             }
         }
-        // otherwise nothing changes!
+        // else leave in place
+    }
+
+    // 3) Collapse any parents whose children became empty (after all erasures).
+    for (auto& wparent : maybe_collapse)
+    {
+        if (auto parent = wparent.lock(); parent && parent->can_delete_children())
+        {
+            parent->delete_children();
+        }
     }
 }
 
@@ -317,6 +388,10 @@ void MultiLevelGrid::MLGNode::draw_debug(RendererInterface& renderer) const
 
 void MultiLevelGrid::draw_debug(RendererInterface& renderer) const
 {
-    for (const EntityInterface* entity : this->get_all_entities()) entity->get_collider().draw_debug(renderer);
-    this->root.draw_debug(renderer);
+    size_t count = 0;
+    for (const EntityInterface* entity : this->get_all_entities())
+    {
+        renderer.draw_entity(*entity);
+    }
+    this->root->draw_debug(renderer);
 }

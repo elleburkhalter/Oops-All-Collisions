@@ -7,7 +7,10 @@ Point OopsBoundingBox::get_centroid() const
 
 bool OopsBoundingBox::contains(const Point p) const
 {
-    return !(p.x < min.x || p.y < min.y || p.x > max.x || p.y > max.y);
+    return min.x <= p.x &&
+        max.x >= p.x &&
+        min.y <= p.y &&
+        max.y >= p.y;
 }
 
 double OopsBoundingBox::get_height() const
