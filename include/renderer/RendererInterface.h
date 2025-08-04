@@ -20,6 +20,10 @@ public:
     RendererInterface() = default;
     virtual ~RendererInterface() = default;
 
+    // ----- Pre-draw and Post-draw hooks -----
+    virtual void before_draw() = 0;
+    virtual void after_draw() = 0;
+
     // ----- Entities -----
     virtual void draw_entity(const EntityInterface& entity) = 0;
 

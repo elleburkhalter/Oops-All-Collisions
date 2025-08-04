@@ -27,6 +27,9 @@ public:
     void draw_circle(Ball ball) override;
     void draw_text(const TextInterface& text) override;
 
+    void before_draw() override;
+    void after_draw() override;
+
     void update_view_area();
     void zoom_view_area(double scroll_amount);
     void move_view_area(double x, double y);

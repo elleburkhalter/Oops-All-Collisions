@@ -19,10 +19,20 @@ RaylibRenderer::RaylibRenderer()
     SetTargetFPS(60);
 }
 
-
 RaylibRenderer::~RaylibRenderer()
 {
     CloseWindow();
+}
+
+void RaylibRenderer::before_draw()
+{
+    BeginDrawing();
+    ClearBackground(BLACK);
+}
+
+void RaylibRenderer::after_draw()
+{
+    EndDrawing();
 }
 
 void RaylibRenderer::update_view_area()
