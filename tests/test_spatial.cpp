@@ -304,3 +304,25 @@ TEST_CASE("SpatialHash updates structure correctly on movement", "[SpatialHash]"
     auto collisions = hash.get_collisions(entity);
     CHECK(collisions.empty());
 }
+
+TEST_CASE("SpatialHash get_all_entities returns correct set", "[SpatialHash]") {
+    SpatialHash hash;
+
+    BallCollider colliderA(Ball({11, 11}, 4.4));
+    Entity entityA(colliderA, {11, 11}, {12, 3.5});
+
+    BallCollider colliderB(Ball({147, 152}, 1.0));
+    Entity entityB(colliderB, {147, 152}, {6.6, -3.4});
+
+    hash.add_collider(entityA);
+    hash.add_collider(entityB);
+
+    std::vector<EntityInterface*> collected;
+    for (EntityInterface* e : hash.get_all_entities()) {
+        collected.push_back(e);
+    }
+
+    REQUIRE(collected.size() == 2);
+    CHECK((collected[0] == &entityA || collected[1] == &entityA));
+    CHECK((collected[0] == &entityB || collected[1] == &entityB));
+}
