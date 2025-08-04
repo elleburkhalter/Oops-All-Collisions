@@ -18,7 +18,6 @@ While the long-term vision could be a fully functional tower defense engine, the
   - Quadtree
   - Sweep and Prune (SAP)
   - BVH (Bounding Volume Hierarchy)
-- Tracks performance statistics (broad-phase checks, collisions, memory usage).
 - Supports **optional visualization** with Raylib to show:
   - Agents
   - Partition boundaries (grid cells, quadtree nodes, etc.)
@@ -40,7 +39,7 @@ This project uses **CMake (>=3.15)** and supports several configuration options:
 ### **Build Options**
 - `WITH_Raylib` (**ON/OFF**, default ON)  
   - Enables or disables Raylib-based visualization.  
-  - If `OFF`, the project builds a headless simulation-only mode (no graphics).
+  - If `OFF`, the project does nothing
 - `WITH_TESTS` (**ON/OFF**, default ON)  
   - Enables building unit tests (Catch2).
 
@@ -61,7 +60,7 @@ cmake --build build
   ./build/tower_defense [--visualize 1|0]
   ```
   - `--visualize=1`: Show Raylib visualization (if built with Raylib).  
-  - `--visualize=0`: Run headless.
+  - `--visualize=0`: Run headless (does nothing at the moment).
 
 - **Tests:**
   ```bash
@@ -129,7 +128,8 @@ test
 - Parallelization for high agent counts (100k+).
 - More detailed statistical collection and visualization overlays.
 - (Long-term) Tower-defense-specific game loop integration.
-
+- Track performance statistics (broad-phase checks, collisions, memory usage).
+- Build a headless simulation-only mode (no graphics).
 ---
 
 ## **License**
