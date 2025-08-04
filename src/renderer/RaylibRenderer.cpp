@@ -143,7 +143,7 @@ void RaylibRenderer::draw_title_screen() const
     RaylibText continue_text{"Click anywhere to begin...", 40, {0, 40}};
     continue_text.set_alignment(TextAlignment::UC);
     continue_text.set_anchor(TextLocation::MC_RELATIVE);
-    continue_text.draw(ORANGE);
+    continue_text.draw(GREEN);
 
     const int screen_width = GetScreenWidth();
     const int screen_height = GetScreenHeight();
