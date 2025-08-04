@@ -52,7 +52,7 @@ void GameLoopInterface::render()
 
 void GameLoopInterface::run()
 {
-    while (should_run())
+    while (is_running())
     {
         if (get_state() == GameState::ACTIVE_GAME_STATE)
         {

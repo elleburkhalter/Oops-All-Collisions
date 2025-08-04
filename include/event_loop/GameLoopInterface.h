@@ -16,7 +16,7 @@ public:
     container(container), renderer(renderer), mouse_handler(mouse_handler)
     {state_machine.transition_state<GameState>(GameState::TITLE_SCREEN_STATE);};
 
-    [[nodiscard]] virtual bool should_run() = 0;
+    [[nodiscard]] virtual bool is_running() = 0;
     [[nodiscard]] virtual double get_dt() = 0;
     [[nodiscard]] virtual GameState get_state() { return state_machine.get_state<GameState>(); }
 
