@@ -1,6 +1,7 @@
 #include <cmath>
 #include <collision/BallCollider.h>
 #include <constants.h>
+#include <iostream>
 
 CollisionCode BallCollider::resolve_collision_with(ColliderInterface& other)
 {
@@ -77,7 +78,7 @@ CollisionCode BallCollider::resolve_collision_with_ball(BallCollider& other)
 
         this->set_position(this->get_centroid() + position_correction);
         this->velocity += impulse / mass;
-
+        //std::cout << velocity.x << std::endl;
         other.set_position(other.get_centroid() - position_correction);
         other.velocity -= impulse / mass;
 
