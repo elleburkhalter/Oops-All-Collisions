@@ -3,6 +3,9 @@
 #include <collision/BallCollider.h>
 #include <spatial/Ball.h>
 #include <data_structures/MultiLevelGrid.h>
+#include <data_structures/NaiveLinear.h>
+#include <data_structures/SpatialHash.h>
+#include <data_structures/SweepAndPrune.h>
 
 using Catch::Matchers::WithinAbs;
 //All test cases assume perfectly elastic
