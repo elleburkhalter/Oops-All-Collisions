@@ -250,3 +250,18 @@ TEST_CASE("NaiveLinear returns correct all_entities view", "[NaiveLinear]") {
     CHECK((collected[0] == &entityA || collected[1] == &entityA));
     CHECK((collected[0] == &entityB || collected[1] == &entityB));
 }
+
+TEST_CASE("SpatialHash adds entities and counts correctly", "[SpatialHash]") {
+    SpatialHash hash;
+    BallCollider colliderA(Ball({15.5, 0.4}, 8.6));
+    Entity entityA(colliderA, {15.5, 0.4}, {3.4, 8.6});
+
+    BallCollider colliderB(Ball({5, 5}, 1.4));
+    Entity entityB(colliderB, {5, 5}, {10.2, -13});
+
+    hash.reserve_slots(2);
+    hash.add_collider(entityA);
+    hash.add_collider(entityB);
+
+    CHECK(hash.get_entity_count() == 2);
+}
