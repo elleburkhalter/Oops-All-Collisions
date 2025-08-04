@@ -25,6 +25,7 @@ public:
     void set_anchor(const TextLocation anchor) { this->anchor = anchor; }
     void set_alignment(const TextAlignment alignment) { this->alignment = alignment; }
 
+    void draw() const override {draw(WHITE);};
     void draw(const Color& color) const;
     void draw(const OopsBoundingBox& parent, const Color& color) const;
 

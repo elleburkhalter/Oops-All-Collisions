@@ -21,9 +21,7 @@ public:
     virtual ~RendererInterface() = default;
 
     // ----- Entities -----
-    virtual void draw_agent(const AgentInterface& agent) = 0;
-    virtual void draw_projectile(const ProjectileInterface& projectile) = 0;
-    // virtual void draw_terrain(const Terrain& terrain) = 0;  // Comes later probably? Haven't thought through this.
+    virtual void draw_entity(const EntityInterface& entity) = 0;
 
     // ----- Debug visualization -----
     virtual void draw_box(const OopsBoundingBox& bounding_box) = 0;

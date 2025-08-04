@@ -21,6 +21,8 @@ public:
     [[nodiscard]] virtual Point get_absolute_position(const OopsBoundingBox& contained_box) const = 0;
     [[nodiscard]] virtual Point get_absolute_position() const = 0;
 
+    virtual void draw() const = 0;
+
 };
 
 #endif //TEXTINTERFACE_H

@@ -8,9 +8,9 @@ class GameLoopInterface
 public:
     virtual ~GameLoopInterface() = default;
 
-    virtual double update_collisions() const = 0;
-    virtual double update_entities() const = 0;
-    virtual double render() const = 0;
+    virtual void update_collisions() = 0;
+    virtual void update_entities(double dt) = 0;
+    virtual void render() const = 0;
     virtual void instantiate_entities(size_t count) = 0;
 
     virtual void run() = 0;

@@ -23,9 +23,9 @@ Point BallCollider::compute_impulse_with_ball(const BallCollider& other) const
     const Point relative_velocity = this->velocity - other.velocity;
 
     Point normal{0.0, 0.0};
-    if (this->position != other.position)
+    if (this->get_centroid() != other.get_centroid())
     {
-        normal = this->position - other.position;
+        normal = this->get_centroid() - other.get_centroid();
         normal /= std::sqrt(normal.x * normal.x + normal.y * normal.y);
     }
 
@@ -51,15 +51,21 @@ Point BallCollider::compute_position_correction_with_ball(const BallCollider& ot
 
         const double correction_mag = std::max(penetration - slop, 0.0) / (inv_mass_a + inv_mass_b) * percent;
         Point normal{1.0, 0};
-        if (this->position != other.position)
+        if (this->get_centroid() != other.get_centroid())
         {
-            normal = this->position - other.position;
+            normal = this->get_centroid() - other.get_centroid();
             normal /= std::sqrt(normal.x * normal.x + normal.y * normal.y);
         }
         return correction_mag * normal;
     }
     return {0, 0};
 }
+
+void BallCollider::set_position(const Point new_position)
+{
+    this->collider_base.center = new_position;
+}
+
 
 CollisionCode BallCollider::resolve_collision_with_ball(BallCollider& other)
 {
@@ -68,10 +74,10 @@ CollisionCode BallCollider::resolve_collision_with_ball(BallCollider& other)
         const Point impulse = compute_impulse_with_ball(other);
         const Point position_correction = compute_position_correction_with_ball(other);
 
-        this->position += position_correction;
+        this->set_position(this->get_centroid() + position_correction);
         this->velocity += impulse / mass;
 
-        other.position -= position_correction;
+        other.set_position(other.get_centroid() - position_correction);
         other.velocity -= impulse / mass;
 
         return CollisionCode::COLLISION_PRESENT;

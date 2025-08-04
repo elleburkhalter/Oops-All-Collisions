@@ -17,6 +17,8 @@ public:
     Point get_absolute_position(const OopsBoundingBox& _) const override { return {0, 0}; };
     Point get_absolute_position() const override { return {0, 0}; };
 
+    void draw() const override {};
+
 private:
     std::string text;
 };
