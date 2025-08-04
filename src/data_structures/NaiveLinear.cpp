@@ -1,3 +1,4 @@
+#include <iostream>
 #include <range/v3/view/subrange.hpp>
 #include <data_structures/NaiveLinear.h>
 
@@ -34,6 +35,12 @@ size_t NaiveLinear::get_entity_count() const
 }
 void NaiveLinear::draw_debug(RendererInterface& renderer) const
 {
-    for (const EntityInterface* entity : this->get_all_entities()) entity->get_collider().draw_debug(renderer);
+    for (const EntityInterface* entity : this->get_all_entities())
+    {
+        entity->draw(renderer);
+        // const OopsBoundingBox bbox = entity->get_collider().get_bounding_box();
+
+        // std::cout << "x: [" << bbox.min.x << ", " << bbox.max.x << "]; y: [" << bbox.min.x << ", " << bbox.max.x << "]" << std::endl;
+    }
 }
 

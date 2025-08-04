@@ -10,11 +10,17 @@
 #include <game_object/enemies/BasicEnemy.h>
 #include <random/NormalDistribution.h>
 #include <constants.h>
+#include <range/v3/action/concepts.hpp>
 
 class ContainerInterface : public DebugDrawableInterface
 {
 public:
     ContainerInterface() = default;
+    ~ContainerInterface() override
+    {
+        for (const EntityInterface* entity : this->entities) delete entity;
+    }
+    // This is SOOO cursed; I don't have big five; don't worry about it.
 
     // ----- Getters -----
     [[nodiscard]] virtual std::vector<EntityInterface*> get_collisions(const EntityInterface& other) const { throw std::runtime_error{"Container implementation does not support single-collision lookups."}; }
@@ -25,7 +31,12 @@ public:
     // ----- Initialization -----
     virtual void reserve_slots(size_t n) = 0;
     virtual void add_collider(EntityInterface& other) = 0;
-    void add_basic_enemy() { auto entity = std::make_unique<BasicEnemy>(NormalDistribution::poll() * 100, NormalDistribution::poll() * 100, NormalDistribution::poll(), NormalDistribution::poll()); add_collider(*entity); entities.emplace_back(std::move(entity)); };
+    void add_basic_enemy()
+    {
+        EntityInterface* entity = new BasicEnemy(POS_SPREAD * NormalDistribution::poll(), POS_SPREAD * NormalDistribution::poll(), VEL_SPREAD * NormalDistribution::poll(), VEL_SPREAD * NormalDistribution::poll());
+        entities.push_back(entity);
+        add_collider(*entity);
+    };
     virtual void post_bulk_add_callback() {};
     virtual void update_structure() = 0;  // should be called after moving entities and changing positions/bounding boxes
 
@@ -34,7 +45,7 @@ public:
     static constexpr double AVERAGE_COLLISIONS_PER_ENTITY = ESTIMATED_AVERAGE_COLLISIONS_PER_ENTITY;
 
 private:
-    std::list<std::unique_ptr<EntityInterface>> entities;
+    std::list<EntityInterface*> entities;
 
     struct collision_record
     {

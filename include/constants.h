@@ -26,6 +26,8 @@
 
 // =========== FOR SIMULATION ==========
 #define N_ENTITIES 100
+#define POS_SPREAD 10
+#define VEL_SPREAD 1
 #define SCROLL_ZOOM_SPEED 0.1
 
 #endif //CONSTANTS_H

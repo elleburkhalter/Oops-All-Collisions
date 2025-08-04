@@ -1,6 +1,7 @@
 #include <renderer/RaylibRenderer.h>
 #include <raylib.h>
 #include <cmath>
+#include <iostream>
 #include <renderer/ui_object/text/RaylibText.h>
 #include <spatial/Ball.h>
 #include <game_object/interfaces/EntityInterface.h>
@@ -15,9 +16,10 @@ RaylibRenderer::RaylibRenderer()
     const int screen_width = GetMonitorHeight(monitor);
     const int screen_height = GetMonitorWidth(monitor);
 
-    view_area = OopsBoundingBox{-static_cast<double>(screen_width) / 2, -static_cast<double>(screen_height) / 2, static_cast<double>(screen_width) / 2, static_cast<double>(screen_height) / 2};
-
     InitWindow(screen_width, screen_height, "Collision Project");
+
+    view_area = OopsBoundingBox{-static_cast<double>(get_screen_width()) / 2, -static_cast<double>(get_screen_height()) / 2, static_cast<double>(get_screen_width()) / 2, static_cast<double>(get_screen_height()) / 2};
+
     SetTargetFPS(60);
 }
 
@@ -34,6 +36,8 @@ void RaylibRenderer::before_draw()
 
 void RaylibRenderer::after_draw()
 {
+    std::cout << "MIN: " << view_area.min.x << ", " << view_area.min.y << std::endl;
+    std::cout << "MAX: " << view_area.max.x << ", " << view_area.max.y << std::endl;
     EndDrawing();
 }
 

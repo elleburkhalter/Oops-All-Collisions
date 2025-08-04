@@ -5,6 +5,7 @@
 #include <functional>
 #include <spatial/Point.h>
 #include <mouse_handler/RaylibMouseFlags.h>
+#include <iostream>
 
 class MouseHandlerInterface
 {

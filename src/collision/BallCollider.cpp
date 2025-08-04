@@ -1,6 +1,7 @@
 #include <cmath>
 #include <collision/BallCollider.h>
 #include <constants.h>
+#include <iostream>
 
 CollisionCode BallCollider::resolve_collision_with(ColliderInterface& other)
 {
@@ -75,11 +76,19 @@ CollisionCode BallCollider::resolve_collision_with_ball(BallCollider& other)
         const Point impulse = compute_impulse_with_ball(other);
         const Point position_correction = compute_position_correction_with_ball(other);
 
+        std::cout << "This pos before: (" << this->get_centroid().x << ", " << this->get_centroid().y << ")" << std::endl;
         this->set_position(this->get_centroid() + position_correction);
+        std::cout << "This pos after: (" << this->get_centroid().x << ", " << this->get_centroid().y << ")" << std::endl;
+        std::cout << "This vel before: (" << this->get_velocity().x << ", " << this->get_velocity().y << ")" << std::endl;
         this->velocity += impulse / mass;
+        std::cout << "This vel after: (" << this->get_velocity().x << ", " << this->get_velocity().y << ")" << std::endl;
 
+        std::cout << "other pos before: (" << other.get_centroid().x << ", " << other.get_centroid().y << ")" << std::endl;
         other.set_position(other.get_centroid() - position_correction);
+        std::cout << "other pos after: (" << other.get_centroid().x << ", " << other.get_centroid().y << ")" << std::endl;
+        std::cout << "other vel before: (" << other.get_velocity().x << ", " << other.get_velocity().y << ")" << std::endl;
         other.velocity -= impulse / mass;
+        std::cout << "other vel after: (" << other.get_velocity().x << ", " << other.get_velocity().y << ")" << std::endl;
 
         return CollisionCode::COLLISION_PRESENT;
     }
