@@ -96,14 +96,13 @@ void RaylibRenderer::zoom_view_area(const double scroll_amount)
 
 void RaylibRenderer::draw_box(const OopsBoundingBox& bounding_box)
 {
-    const auto screen_width = get_screen_height();
-    const auto screen_height = get_screen_width();
+    const auto screen_width = get_screen_width();
+    const auto screen_height = get_screen_height();
 
     const Point draw_scale = {screen_width * bounding_box.get_width() / view_area.get_width(), screen_height * bounding_box.get_height() / view_area.get_height()};
     const Point top_coord = screen_width * (bounding_box.min - view_area.min) / view_area.get_width();
-    const Point bottom_coord = top_coord + draw_scale;
 
-    DrawRectangleLines(static_cast<int>(top_coord.x), static_cast<int>(top_coord.y), static_cast<int>(bottom_coord.x), static_cast<int>(bottom_coord.y), GREEN);
+    DrawRectangleLines(static_cast<int>(top_coord.x), static_cast<int>(top_coord.y), static_cast<int>(draw_scale.x), static_cast<int>(draw_scale.y), GREEN);
 }
 
 void RaylibRenderer::draw_point(const Point point)

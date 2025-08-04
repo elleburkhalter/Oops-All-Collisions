@@ -41,23 +41,37 @@ std::vector<EntityInterface*> SpatialHash::get_collisions(const EntityInterface&
 }
 void SpatialHash::update_structure()
 {
+    std::unordered_map<hash_key, std::list<EntityInterface*>, hash_key_hasher> new_cells;
+    new_cells.reserve(static_cast<size_t>(this->get_entity_count() * AVERAGE_AGENT_OVERLAP / TARGET_LOAD_FACTOR));
+
     for (auto& [old_key, colliders] : cells)
     {
-        for (auto it = colliders.begin(); it != colliders.end(); ++it)
+        for (auto it = colliders.begin(); it != colliders.end(); )
         {
             if (const hash_key curr_key = compute_hash(**it); curr_key != old_key)
             {
-                colliders.erase(it);
-                cells[curr_key].emplace_back(*it);
+                new_cells[curr_key].emplace_back(*it);
+                it = colliders.erase(it);
+            }
+            else
+            {
+                ++it;
             }
         }
     }
+
+    for (auto& [k, v] : new_cells)
+    {
+        cells[k].splice(cells[k].end(), v);
+    }
+
+    std::erase_if(cells, [](const auto& pair) { return pair.second.empty(); });
 }
 
 SpatialHash::hash_key SpatialHash::compute_hash(const EntityInterface& other)
 {
     const Point center = other.get_location();
-    return hash_key(static_cast<int>(center.x * POSITION_TO_CELL), static_cast<int>(center.y * POSITION_TO_CELL));
+    return hash_key(static_cast<int>(std::floor(center.x * POSITION_TO_CELL)), static_cast<int>(std::floor(center.y * POSITION_TO_CELL)));
 }
 
 ranges::any_view<EntityInterface*> SpatialHash::get_all_entities() const

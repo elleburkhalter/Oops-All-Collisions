@@ -25,10 +25,10 @@
 #define ALLOWABLE_PENETRATION_SLOP 0.01;
 
 // =========== FOR SIMULATION ==========
-#define N_ENTITIES 100
-#define X_START_WIDTH 20
-#define POS_SPREAD 10
-#define VEL_SPREAD 1
+#define N_ENTITIES 1000
+#define X_START_WIDTH 50
+#define POS_SPREAD 100
+#define VEL_SPREAD 10
 #define SCROLL_ZOOM_SPEED 0.1
 
 #endif //CONSTANTS_H
