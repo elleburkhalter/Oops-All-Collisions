@@ -188,3 +188,18 @@ TEST_CASE("MultiLevelGrid detects collisions between ball objects", "[MultiLevel
     // auto collisions_for_3 = grid.get_collisions(entity3);
     // CHECK(collisions_for_3.empty());
 }
+
+TEST_CASE("NaiveLinear adds and counts entities correctly", "[NaiveLinear]") {
+    NaiveLinear grid;
+    BallCollider colliderA(Ball({90.1, 20.2}, 14.3));
+    Entity entityA(colliderA, {0, 0}, {0, 0});
+
+    BallCollider colliderB(Ball({102.4, 86.6}, 1.1));
+    Entity entityB(colliderB, {102.4, 86.6}, {0, 0});
+
+    grid.reserve_slots(2);
+    grid.add_collider(entityA);
+    grid.add_collider(entityB);
+
+    CHECK(grid.get_entity_count() == 2);
+}
