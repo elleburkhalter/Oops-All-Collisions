@@ -31,7 +31,7 @@ private:
             const OopsBoundingBox bbox = referer.get_collider().get_bounding_box();
             is_begin ? location = bbox.min.x : location = bbox.max.x;
         }
-        std::unique_ptr<EntityInterface> referer;
+        EntityInterface* referer;
         double location = 0.0;
         bool is_begin = true;
     };

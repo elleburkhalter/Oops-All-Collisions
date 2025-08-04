@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <data_structures/SweepAndPrune.h>
 #include <algorithm>
+#include <iostream>
 
 void SweepAndPrune::reserve_slots(const size_t n)
 {
@@ -23,6 +24,12 @@ void SweepAndPrune::post_bulk_add_callback()
 }
 void SweepAndPrune::update_structure()
 {
+    for (auto& loc : this->entities)
+    {
+        const OopsBoundingBox bbox = loc.referer->get_collider().get_bounding_box();
+        loc.location = loc.is_begin ? bbox.min.x : bbox.max.x;
+    }
+
     // Insertion sort is O(n) because structure should be nearly sorted.
     for (size_t i = 0; i < this->entities.size(); ++i)
     {
@@ -43,7 +50,7 @@ ranges::any_view<EntityInterface*> SweepAndPrune::get_all_entities() const
 
     auto transformed = base_range
         | ranges::views::transform([](const SAPLocation& loc) -> EntityInterface* {
-              return loc.referer.get();
+              return loc.referer;
           });
 
     return {transformed};
@@ -56,17 +63,16 @@ std::list<std::pair<EntityInterface*, EntityInterface*>> SweepAndPrune::get_all_
 
     for (const auto& entity_bound : this->entities)
     {
-        EntityInterface* current = entity_bound.referer.get();
+        EntityInterface* current = entity_bound.referer;
+        ColliderInterface& collider1 = current->get_collider();
+        const OopsBoundingBox bbox1 = collider1.get_bounding_box();
 
         if (entity_bound.is_begin)
         {
             // Check current against all active entities
             for (auto* other : active_entities)
             {
-                ColliderInterface& collider1 = current->get_collider();
                 ColliderInterface& collider2 = other->get_collider();
-
-                const OopsBoundingBox bbox1 = collider1.get_bounding_box();
 
                 // Guaranteed to overlap on x-axis by SAP; check y-axis
                 if (const OopsBoundingBox bbox2 = collider2.get_bounding_box(); bbox1.max.y < bbox2.min.y || bbox1.min.y > bbox2.max.y)

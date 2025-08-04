@@ -6,6 +6,7 @@
 void GameLoopInterface::instantiate_entities(const size_t count)
 {
     for (size_t i = 0; i < count; i++) container.add_basic_enemy();
+    container.post_bulk_add_callback();
 }
 
 void GameLoopInterface::update_collisions()
